@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,8 +11,21 @@ const AddEmployee = () => {
     email: '',
     phone: '',
   });
+  const [employeeToEdit, setEmployeeToEdit] = useState(null);
 
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
+      const employee = storedEmployees.find(emp => emp.id === id);
+      if (employee) {
+        setFormData(employee);
+        setEmployeeToEdit(employee);
+      }
+    }
+  }, [id])
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,27 +36,31 @@ const AddEmployee = () => {
     event.preventDefault();
 
     const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
-    const isDuplicate = storedEmployees.some((employee) => employee.id === formData.id);
+    const isDuplicate = storedEmployees.some((employee) => employee.id === formData.id && employee.id !== employeeToEdit?.id);
 
     if (isDuplicate) {
       toast.error('Employee ID already exists!');
     } else {
-      const newEmployee = { ...formData };
+      let updatedEmployees;
+      if (employeeToEdit) {
+        updatedEmployees = storedEmployees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
+      } else {
+        updatedEmployees = [...storedEmployees, formData];
+      }
 
-      const updatedEmployees = [...storedEmployees, newEmployee];
       localStorage.setItem('employees', JSON.stringify(updatedEmployees));
+      toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
 
-      toast.success('Employee added successfully!');
-      setTimeout(() => navigate('/'), 2000); 
+      setTimeout(() => navigate('/'), 2000);
     }
   };
 
   return (
     <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
-      <h3 className="text-xl text-center font-medium ">Add New Employee</h3>
+      <h3 className="text-xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
         <div className='grid grid-cols-1'>
-        <label htmlFor="id" className="block text-sm font-medium text-gray-700">Employee ID</label>
+          <label htmlFor="id" className="block text-sm font-medium text-gray-700">Employee ID</label>
           <input
             type="text"
             name="id"
@@ -53,7 +70,7 @@ const AddEmployee = () => {
             required
             className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
-                    <label htmlFor="name" className="block text-sm mt-5 font-medium text-gray-700">Name</label>
+          <label htmlFor="name" className="block text-sm mt-5 font-medium text-gray-700">Name</label>
           <input
             type="text"
             name="name"
@@ -63,7 +80,7 @@ const AddEmployee = () => {
             required
             className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
-                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Designation</label>
+          <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Designation</label>
           <input
             type="text"
             name="designation"
@@ -73,7 +90,7 @@ const AddEmployee = () => {
             required
             className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
-                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Email</label>
+          <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Email</label>
           <input
             type="email"
             name="email"
@@ -83,7 +100,7 @@ const AddEmployee = () => {
             required
             className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
-                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Phone</label>
+          <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Phone</label>
           <input
             type="number"
             name="phone"
@@ -93,15 +110,14 @@ const AddEmployee = () => {
             required
             className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
-       
-        
+
+
           <button
             type="submit"
             className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
           >
-            Add Employee
-          </button>
-          </div>
+            {employeeToEdit ? 'Update Employee' : 'Add Employee'}          </button>
+        </div>
       </form>
       <ToastContainer />
     </div>

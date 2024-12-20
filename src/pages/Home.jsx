@@ -77,7 +77,7 @@ const Home = () => {
                             <td className="border px-4 py-2 text-center">{employee.phone}</td>
                             <td className="border px-4 py-2">
                                 <div className="flex justify-center items-center ">
-                                <Link to={`/update-employee/${employee.id}`}
+                                <Link to={`/addEmployee/${employee.id}`}
                                     className="text-orange-500 "
                                 >
                                   <FaRegEdit />
