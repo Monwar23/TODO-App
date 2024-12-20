@@ -39,8 +39,8 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className='p-4 lg:w-2/5 w-3/5 mx-auto'>
-      <h3 className="text-xl text-center font-medium mt-5">Add New Employee</h3>
+    <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
+      <h3 className="text-xl text-center font-medium ">Add New Employee</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
         <div className='grid grid-cols-1 gap-6'>
           <input
@@ -80,11 +80,11 @@ const AddEmployee = () => {
             className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
           />
           <input
-            type="text"
+            type="number"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Phone"
+            placeholder="Phone" min="1"
             required
             className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
           />

@@ -8,6 +8,7 @@ import {
 import Home from './pages/Home';
 import Root from './Root/Root';
 import AddEmployee from './pages/AddEmployee';
+import UpdatedEmployee from './pages/UpdatedEmployee';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path:'/addEmployee',
         element:<AddEmployee></AddEmployee>
+      },
+      {
+        path:'/update-employee/:id',
+        element:<UpdatedEmployee></UpdatedEmployee>
       },
     ]
   },
