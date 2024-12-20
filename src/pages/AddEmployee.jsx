@@ -42,7 +42,8 @@ const AddEmployee = () => {
     <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
       <h3 className="text-xl text-center font-medium ">Add New Employee</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
-        <div className='grid grid-cols-1 gap-6'>
+        <div className='grid grid-cols-1'>
+        <label htmlFor="id" className="block text-sm font-medium text-gray-700">Employee ID</label>
           <input
             type="text"
             name="id"
@@ -50,8 +51,9 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Employee ID"
             required
-            className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
+                    <label htmlFor="name" className="block text-sm mt-5 font-medium text-gray-700">Name</label>
           <input
             type="text"
             name="name"
@@ -59,8 +61,9 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Name"
             required
-            className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
+                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Designation</label>
           <input
             type="text"
             name="designation"
@@ -68,8 +71,9 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Designation"
             required
-            className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
+                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Email</label>
           <input
             type="email"
             name="email"
@@ -77,22 +81,23 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Email"
             required
-            className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
+                    <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Phone</label>
           <input
             type="number"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Phone" min="1"
+            placeholder="Phone" min={1}
             required
-            className='border py-2 px-2 rounded-lg border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
           />
        
         
           <button
             type="submit"
-            className="btn border py-2 px-2 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
+            className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
           >
             Add Employee
           </button>
