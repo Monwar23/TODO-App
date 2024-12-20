@@ -68,7 +68,7 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Employee ID"
             required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
           />
           <label htmlFor="name" className="block text-sm mt-5 font-medium text-gray-700">Name</label>
           <input
@@ -78,7 +78,7 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Name"
             required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
           />
           <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Designation</label>
           <input
@@ -88,7 +88,7 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Designation"
             required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
           />
           <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Email</label>
           <input
@@ -98,7 +98,7 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Email"
             required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
           />
           <label htmlFor="id" className="block text-sm mt-5 font-medium text-gray-700">Phone</label>
           <input
@@ -108,7 +108,7 @@ const AddEmployee = () => {
             onChange={handleChange}
             placeholder="Phone" min={1}
             required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:border-orange-500 focus:outline-none'
+            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
           />
 
 
