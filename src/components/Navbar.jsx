@@ -3,16 +3,16 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
     const navLinks = <>
        <NavLink className={({ isActive }) =>
-            isActive ? 'text-green-500 font-semibold' : 'font-semibold hover:text-green-500'
+            isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
         } to="/">Home</NavLink>
 
         <NavLink className={({ isActive }) =>
-            isActive ? 'text-green-500  font-semibold' : 'font-semibold hover:text-green-500'
-        } to="/petListing">Add Employee</NavLink>
+            isActive ? 'text-orange-500  font-semibold' : 'font-semibold hover:text-orange-500'
+        } to="/addEmployee">Add Employee</NavLink>
 
        <NavLink className={({ isActive }) =>
-            isActive ? 'text-green-500 font-semibold' : 'font-semibold hover:text-green-500'
-        } to="/donationCampaigns">Tasks</NavLink>
+            isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
+        } to="/tasks">Tasks</NavLink>
     </>
 
     return (
