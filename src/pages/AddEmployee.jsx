@@ -57,7 +57,7 @@ const AddEmployee = () => {
 
   return (
     <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
-      <h3 className="text-xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
+      <h3 className="text-2xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
         <div className='grid grid-cols-1'>
           <label htmlFor="id" className="block text-sm font-medium text-gray-700">Employee ID</label>
