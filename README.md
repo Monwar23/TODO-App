@@ -47,6 +47,7 @@ The TODO App is a simple yet powerful frontend application built to manage emplo
 - **Libraries**:
   - React Router for navigation
   - React Toastify for toast notifications
+  - React Icons
 
 ---
 
@@ -66,7 +67,6 @@ The TODO App is a simple yet powerful frontend application built to manage emplo
 
    ```bash
    cd TODO-App
-   ```
 
 3. Install the dependencies:
 
@@ -74,5 +74,6 @@ The TODO App is a simple yet powerful frontend application built to manage emplo
    npm install
 
 4. Running the App
+
      ```bash
    npm run dev  
