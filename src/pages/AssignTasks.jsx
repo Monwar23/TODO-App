@@ -37,7 +37,7 @@ const AssignTasks = () => {
             employeeId: selectedEmployeeData.id,
             employeeName: selectedEmployeeData.name,
             description: taskDescription,
-            status: 'incomplete',
+            status: 'Incomplete',
         };
 
         // Save task in localStorage

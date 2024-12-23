@@ -14,12 +14,27 @@ const Tasks = () => {
 
     }, [])
 
-    const deleteTask=(id)=>{
-        const updateTasks=tasks.filter((task)=>task.employeeId !==id);
+    const deleteTask = (id) => {
+        const updateTasks = tasks.filter((task) => task.employeeId !== id);
         setTasks(updateTasks);
         toast.success('Task Deleted Successfully!');
-        localStorage.setItem('tasks',JSON.stringify(updateTasks))
+        localStorage.setItem('tasks', JSON.stringify(updateTasks))
 
+    }
+
+    const toggleTaskStatus = (id) => {
+        const updatedTasks = tasks.map((task) => {
+            if (task.employeeId === id) {
+                return {
+                    ...task,
+                    status: task.status === "Incomplete" ? "Completed" : "Incomplete"
+                }
+            }
+            return task
+        });
+        setTasks(updatedTasks);
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+        toast.info("Task Status Updated!");
     }
 
     return (
@@ -43,10 +58,17 @@ const Tasks = () => {
 
                                 <td className="border px-4 py-2 text-center">{task.description}</td>
                                 <td className="border px-4 py-2 text-center">{task.employeeId} - {task.employeeName}</td>
-                                <td className="border px-4 py-2 text-center">{task.status}</td>
+                                <td className="border px-4 py-2 text-center">
+                                    <button
+                                        onClick={() => toggleTaskStatus(task.employeeId)} className={`btn px-2 py-1 rounded-lg ${task.status === "Completed"
+                                                ? "bg-green-500 text-white"
+                                                : "bg-orange-500 text-white"
+                                            }`}
+                                    >{task.status}</button>
+                                </td>
                                 <td className="border px-4 py-2">
                                     <div className="flex justify-center items-center ">
-                                        <Link to={`/addEmployee/${task.employeeId}`}
+                                        <Link to={`/assignTasks/${task.employeeId}`}
                                             className="text-orange-500 "
                                         >
                                             <FaRegEdit />

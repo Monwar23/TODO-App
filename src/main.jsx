@@ -38,6 +38,10 @@ const router = createBrowserRouter([
         path:'/assignTasks',
         element:<AssignTasks></AssignTasks>
       },
+      {
+        path:'/assignTasks/:id',
+        element:<AssignTasks></AssignTasks>
+      },
     ]
   },
 ]);
