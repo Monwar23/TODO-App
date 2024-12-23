@@ -15,7 +15,7 @@ const AssignTasks = () => {
 
         // Filter employees who do not have an assigned task
         const availableEmployees = storedEmployees.filter(employee =>
-            !storedTasks.some(task => task.employee === employee.id)
+            !storedTasks.some(task => task.employeeId === employee.id)
         );
         setEmployees(availableEmployees);
     }, []);
@@ -30,9 +30,14 @@ const AssignTasks = () => {
             toast.error('Please enter a task description.');
             return;
         }
+
+        const selectedEmployeeData = employees.find(emp => emp.id === selectedEmployee);
+
         const newTask = {
-            employee: selectedEmployee,
+            employeeId: selectedEmployeeData.id,
+            employeeName: selectedEmployeeData.name,
             description: taskDescription,
+            status: 'incomplete',
         };
 
         // Save task in localStorage
