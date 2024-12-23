@@ -6,15 +6,19 @@ import useLocalStorage from "../components/useLocalStorage";
 
 
 const AssignTasks = () => {
-    const [employees, setEmployees] = useLocalStorage('employees', []);
+    // state declare
+    const [employees] = useLocalStorage('employees', []);
     const [tasks, setTasks] = useLocalStorage('tasks', []);
     const [selectedEmployee, setSelectedEmployee] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
     const [taskToEdit, setTaskToEdit] = useState(null);
 
+    // navigate other routes
     const navigate = useNavigate();
+    // find id from url
     const { id } = useParams();
 
+    //   // if find id from url then find the data
     useEffect(() => {
         if (id) {
             const task = tasks.find(task => task.employeeId === id)
@@ -27,9 +31,13 @@ const AssignTasks = () => {
         
     }, [id, taskToEdit,tasks,]);
 
+    // find available employee
+
     const availableEmployees = employees.filter(employee =>
         !tasks.some(task => task.employeeId === employee.id && task.status !== 'Completed')
     );
+
+    // if task for edit then find and push available employee
 
     if (taskToEdit) {
         const currentEmployee = employees.find(employee => employee.id === taskToEdit.employeeId);
@@ -38,6 +46,7 @@ const AssignTasks = () => {
         }
     }
 
+    // task form submit
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!selectedEmployee) {

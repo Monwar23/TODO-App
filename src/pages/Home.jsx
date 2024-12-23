@@ -9,7 +9,7 @@ import useLocalStorage from "../components/useLocalStorage";
 
 const Home = () => {
     // state declare
-    const [employees, setEmployees] = useLocalStorage('employees', []); ; 
+    const [employees, setEmployees] = useLocalStorage('employees', []); 
     const [searchTerm, setSearchTerm] = useState(""); 
     const [filteredEmployees, setFilteredEmployees] = useState([]); 
 

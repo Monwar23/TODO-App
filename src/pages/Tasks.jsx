@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
@@ -9,6 +8,7 @@ import useLocalStorage from "../components/useLocalStorage";
 const Tasks = () => {
     const [tasks, setTasks] = useLocalStorage("tasks", []);
 
+    // delete task
     const deleteTask = (id) => {
         const updateTasks = tasks.filter((task) => task.employeeId !== id);
         setTasks(updateTasks);
@@ -16,6 +16,7 @@ const Tasks = () => {
 
     }
 
+    // toggle complete or incomplete
     const toggleTaskStatus = (id) => {
         const updatedTasks = tasks.map((task) => {
             if (task.employeeId === id) {

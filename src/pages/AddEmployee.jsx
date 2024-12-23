@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 
 const AddEmployee = () => {
+  // state declare
   const [formData, setFormData] = useState({
     id: '',
     name: '',
@@ -14,10 +15,12 @@ const AddEmployee = () => {
   });
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [employees, setEmployees] = useLocalStorage('employees', []);
-
+// navigate other routes
   const navigate = useNavigate();
+  // id from url
   const { id } = useParams();
 
+  // if find id from url then find the data
   useEffect(() => {
     if (id) {
       const employee = employees.find(emp => emp.id === id);
@@ -28,11 +31,13 @@ const AddEmployee = () => {
     }
   }, [id,employees])
 
+  // update form data
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // submit data
   const handleSubmit = (event) => {
     event.preventDefault();
 
