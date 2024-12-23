@@ -63,17 +63,14 @@ The TODO App is a simple yet powerful frontend application built to manage emplo
    ```bash
    git clone https://github.com/Monwar23/TODO-App
 
- 2. Navigate to the project directory:
-
+2. Navigate to the project directory:
    ```bash
    cd TODO-App
 
 3. Install the dependencies:
-
    ```bash
    npm install
 
 4. Running the App
-
      ```bash
    npm run dev  
