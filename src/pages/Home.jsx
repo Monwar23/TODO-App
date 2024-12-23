@@ -50,7 +50,7 @@ useEffect(() => {
                 value={searchTerm} 
                 onChange={handleSearch} 
                 placeholder="Search by ID, Name, Email or Phone"
-                className="border py-2 px-4 rounded-lg focus:outline-none focus:border-orange-500"
+                className="border py-2 px-4 border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
             />
         </div>
     {/* table of employees details */}
@@ -95,8 +95,11 @@ useEffect(() => {
                 </tbody>
             </table>
         ) : (
-            <p className="text-center mt-4 text-gray-500">No employees found.</p>
-        )}
+            <div className="flex items-center justify-center " style={{ minHeight: "calc(100vh - 155px)" }}>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <p className="text-center mt-4 text-gray-500">No tasks found.</p>
+            </div>
+          </div>        )}
         <ToastContainer></ToastContainer>
     </div>
     
