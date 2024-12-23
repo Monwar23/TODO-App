@@ -4,20 +4,19 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import useLocalStorage from "../components/useLocalStorage";
 
 
 const Home = () => {
     // state declare
-    const [employees, setEmployees] = useState([]); 
+    const [employees, setEmployees] = useLocalStorage('employees', []); ; 
     const [searchTerm, setSearchTerm] = useState(""); 
     const [filteredEmployees, setFilteredEmployees] = useState([]); 
 
 // data load from local Storage
-    useEffect(() => {
-        const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
-        setEmployees(storedEmployees);
-        setFilteredEmployees(storedEmployees); 
-    }, []);
+useEffect(() => {
+    setFilteredEmployees(employees);
+}, [employees]);
 
     // search functionality
     const handleSearch = (event) => {
@@ -30,6 +29,7 @@ const Home = () => {
 
         setFilteredEmployees(filtered); 
     };
+
 // delete operation
     const deleteEmployee = (id) => {
         const updatedEmployees = employees.filter((emp) => emp.id !== id);

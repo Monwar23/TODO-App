@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useLocalStorage from "../components/useLocalStorage";
 
 const AddEmployee = () => {
   const [formData, setFormData] = useState({
@@ -12,20 +13,20 @@ const AddEmployee = () => {
     phone: '',
   });
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
+  const [employees, setEmployees] = useLocalStorage('employees', []);
 
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
-      const employee = storedEmployees.find(emp => emp.id === id);
+      const employee = employees.find(emp => emp.id === id);
       if (employee) {
         setFormData(employee);
         setEmployeeToEdit(employee);
       }
     }
-  }, [id])
+  }, [id,employees])
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,20 +36,19 @@ const AddEmployee = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
-    const isDuplicate = storedEmployees.some((employee) => employee.id === formData.id && employee.id !== employeeToEdit?.id);
+    const isDuplicate = employees.some((employee) => employee.id === formData.id && employee.id !== employeeToEdit?.id);
 
     if (isDuplicate) {
       toast.error('Employee ID already exists!');
     } else {
       let updatedEmployees;
       if (employeeToEdit) {
-        updatedEmployees = storedEmployees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
+        updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
       } else {
-        updatedEmployees = [...storedEmployees, formData];
+        updatedEmployees = [...employees, formData];
       }
 
-      localStorage.setItem('employees', JSON.stringify(updatedEmployees));
+     setEmployees(updatedEmployees)
       toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
 
       setTimeout(() => navigate('/'), 2000);

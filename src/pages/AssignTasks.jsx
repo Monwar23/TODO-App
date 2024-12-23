@@ -1,24 +1,42 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useLocalStorage from "../components/useLocalStorage";
+
 
 const AssignTasks = () => {
-    const [employees, setEmployees] = useState([]);
+    const [employees, setEmployees] = useLocalStorage('employees', []);
+    const [tasks, setTasks] = useLocalStorage('tasks', []);
     const [selectedEmployee, setSelectedEmployee] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
+    const [taskToEdit, setTaskToEdit] = useState(null);
+
     const navigate = useNavigate();
+    const { id } = useParams();
 
     useEffect(() => {
-        const storedEmployees = JSON.parse(localStorage.getItem('employees')) || [];
-        const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        if (id) {
+            const task = tasks.find(task => task.employeeId === id)
+            if (task && !taskToEdit) {
+                setTaskToEdit(task);
+                setSelectedEmployee(task.employeeId);
+                setTaskDescription(task.description);
+            }
+        }
+        
+    }, [id, taskToEdit,tasks,]);
 
-        // Filter employees who do not have an assigned task
-        const availableEmployees = storedEmployees.filter(employee =>
-            !storedTasks.some(task => task.employeeId === employee.id)
-        );
-        setEmployees(availableEmployees);
-    }, []);
+    const availableEmployees = employees.filter(employee =>
+        !tasks.some(task => task.employeeId === employee.id && task.status !== 'Completed')
+    );
+
+    if (taskToEdit) {
+        const currentEmployee = employees.find(employee => employee.id === taskToEdit.employeeId);
+        if (currentEmployee && !availableEmployees.some(emp => emp.id === currentEmployee.id)) {
+            availableEmployees.push(currentEmployee);
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,20 +51,31 @@ const AssignTasks = () => {
 
         const selectedEmployeeData = employees.find(emp => emp.id === selectedEmployee);
 
-        const newTask = {
-            employeeId: selectedEmployeeData.id,
-            employeeName: selectedEmployeeData.name,
-            description: taskDescription,
-            status: 'Incomplete',
-        };
+        // update task
+        if (taskToEdit) {
+            const updatedTasks = tasks.map(task => task.employeeId === taskToEdit.employeeId ?
+                { ...task, employeeId: selectedEmployeeData.id, employeeName: selectedEmployeeData.name, description: taskDescription }
+                :
+                task
+            );
+            setTasks(updatedTasks);
+            toast.success('Task updated successfully!');
+        }
+        // add task
+        else {
+            const newTask = {
+                employeeId: selectedEmployeeData.id,
+                employeeName: selectedEmployeeData.name,
+                description: taskDescription,
+                status: 'Incomplete',
+            };
 
-        // Save task in localStorage
-        const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        existingTasks.push(newTask);
-        localStorage.setItem('tasks', JSON.stringify(existingTasks));
+            // Save task in localStorage
 
-        toast.success('Task assigned successfully!');
+            setTasks([...tasks, newTask]);
 
+            toast.success('Task assigned successfully!');
+        }
         // Reset form state
         setSelectedEmployee('');
         setTaskDescription('');
@@ -56,7 +85,7 @@ const AssignTasks = () => {
 
     return (
         <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
-            <h3 className="text-2xl text-center font-medium text-gray-800">Assign Task</h3>
+            <h3 className="text-2xl text-center font-medium text-gray-800"> {taskToEdit ? 'Update Task' : 'Assign Task'}</h3>
             <form onSubmit={handleSubmit} className="mt-4">
                 <div className="grid grid-cols-1 gap-4">
                     <div>
@@ -71,7 +100,7 @@ const AssignTasks = () => {
                             className="w-full border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                         >
                             <option value="">Select an employee</option>
-                            {employees.map((employee, index) => (
+                            {availableEmployees.map((employee, index) => (
                                 <option key={index} value={employee.id}>
                                     {employee.id} - {employee.name}
                                 </option>
@@ -97,7 +126,8 @@ const AssignTasks = () => {
                             type="submit"
                             className="btn w-full border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
                         >
-                            Assign Task
+                            {taskToEdit ? 'Update Task' : 'Assign Task'}
+
                         </button>
                     </div>
                 </div>

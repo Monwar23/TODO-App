@@ -1,24 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import useLocalStorage from "../components/useLocalStorage";
 
 const Tasks = () => {
-    const [tasks, setTasks] = useState([]);
-
-    useEffect(() => {
-        const storedTasks = JSON.parse(localStorage.getItem("tasks") || []);
-        setTasks(storedTasks);
-
-    }, [])
+    const [tasks, setTasks] = useLocalStorage("tasks", []);
 
     const deleteTask = (id) => {
         const updateTasks = tasks.filter((task) => task.employeeId !== id);
         setTasks(updateTasks);
         toast.success('Task Deleted Successfully!');
-        localStorage.setItem('tasks', JSON.stringify(updateTasks))
 
     }
 
@@ -33,7 +27,6 @@ const Tasks = () => {
             return task
         });
         setTasks(updatedTasks);
-        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
         toast.info("Task Status Updated!");
     }
 
