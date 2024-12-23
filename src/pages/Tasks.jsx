@@ -9,6 +9,8 @@ import { useState } from "react";
 const Tasks = () => {
     const [tasks, setTasks] = useLocalStorage("tasks", []);
     const [filter, setFilter] = useState("All");
+    const [searchTerm, setSearchTerm] = useState("");
+
 
     // delete task
     const deleteTask = (id) => {
@@ -33,11 +35,17 @@ const Tasks = () => {
         toast.info("Task Status Updated!");
     }
 
-    // Filter tasks based on selected status
-    const filteredTasks = filter === "All"
-        ? tasks
-        : tasks.filter((task) => task.status === filter);
+    // Filter tasks based on selected status and search function
+    const filteredTasks = tasks.filter((task) => {
+        const statusFilter = filter === "All" || task.status === filter;
 
+        const statusSearch = task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            task.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            task.employeeId.toString().includes(searchTerm);
+
+        return statusFilter && statusSearch;
+
+    })
     return (
         <div className="mt-5">
             <h2 className="text-2xl font-medium text-center">
@@ -53,6 +61,13 @@ const Tasks = () => {
                     <option value="Incomplete">Incomplete</option>
                     <option value="Completed">Completed</option>
                 </select>
+                <input
+                    type="text"
+                    className="border px-4 py-2 rounded-lg ml-4 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    placeholder="Search tasks"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
             {filteredTasks.length > 0 ? (
                 <table className="table-auto border-collapse mt-4 w-2/3 mx-auto">
@@ -73,8 +88,8 @@ const Tasks = () => {
                                 <td className="border px-4 py-2 text-center">
                                     <button
                                         onClick={() => toggleTaskStatus(task.employeeId)} className={`btn px-2 py-1 rounded-lg ${task.status === "Completed"
-                                                ? "bg-green-500 text-white"
-                                                : "bg-orange-500 text-white"
+                                            ? "bg-green-500 text-white"
+                                            : "bg-orange-500 text-white"
                                             }`}
                                     >{task.status}</button>
                                 </td>
@@ -99,10 +114,10 @@ const Tasks = () => {
                 </table>
             ) : (
                 <div className="flex items-center justify-center " style={{ minHeight: "calc(100vh - 155px)" }}>
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                  <p className="text-center mt-4 text-gray-500">No tasks found.</p>
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <p className="text-center mt-4 text-gray-500">No tasks found.</p>
+                    </div>
                 </div>
-              </div>
             )}
             <ToastContainer></ToastContainer>
         </div>
