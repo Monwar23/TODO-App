@@ -16,7 +16,7 @@ const Tasks = () => {
 
     // delete task
     const deleteTask = (id) => {
-        const updateTasks = tasks.filter((task) => task.employeeId !== id);
+        const updateTasks = tasks.filter((task) => task.id !== id);
         setTasks(updateTasks);
         toast.success('Task Deleted Successfully!');
 
@@ -25,7 +25,7 @@ const Tasks = () => {
     // toggle complete or incomplete
     const toggleTaskStatus = (id) => {
         const updatedTasks = tasks.map((task) => {
-            if (task.employeeId === id) {
+            if (task.id === id) {
                 return {
                     ...task,
                     status: task.status === "Incomplete" ? "Completed" : "Incomplete"
@@ -49,13 +49,16 @@ const Tasks = () => {
 
     })
 
+    // table data details
+
     const columns = [
         { header: "Task", accessor: (row) => row.description },
         { header: "Employee", accessor: (row) => `${row.employeeName} - ${row.employeeDesignation}` },
+        { header: "Estimate Time", accessor: (row) => `${row.duration}` },
         {
             header: "Status", accessor: (row) => (
                 <button
-                    onClick={() => toggleTaskStatus(row.employeeId)}
+                    onClick={() => toggleTaskStatus(row.id)}
                     className={`btn px-2 py-1 rounded-lg ${row.status === "Completed" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
                         }`}
                 >
@@ -95,7 +98,7 @@ const Tasks = () => {
                     renderActions={(task) => (
                         <>
                             {task.status !== "Completed" ? (
-                                <Link to={`/assignTasks/${task.employeeId}`} className="text-orange-500">
+                                <Link to={`/assignTasks/${task.id}`} className="text-orange-500">
                                     <FaRegEdit />
                                 </Link>
                             ) : (
@@ -104,7 +107,7 @@ const Tasks = () => {
                                 </span>
                             )}
                             <button
-                                onClick={() => deleteTask(task.employeeId)}
+                                onClick={() => deleteTask(task.id)}
                                 className="text-orange-500 ml-2"
                             >
                                 <RiDeleteBin5Fill />

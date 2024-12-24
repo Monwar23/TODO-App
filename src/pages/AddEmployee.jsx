@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuidv4 } from 'uuid';
 import FormField from '../components/FormField';
 
 
@@ -17,8 +17,8 @@ const AddEmployee = () => {
   });
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [employees, setEmployees] = useLocalStorage('employees', []);
-  
-// navigate other routes
+
+  // navigate other routes
   const navigate = useNavigate();
   // id from url
   const { id } = useParams();
@@ -32,7 +32,7 @@ const AddEmployee = () => {
         setEmployeeToEdit(employee);
       }
     }
-  }, [id,employees])
+  }, [id, employees])
 
   // update form data
   const handleChange = (event) => {
@@ -44,18 +44,18 @@ const AddEmployee = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-      let updatedEmployees;
-      if (employeeToEdit) {
-        updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
-      } else {
-        const newEmployee = { ...formData, id: uuidv4() };
-        updatedEmployees = [...employees, newEmployee];
-      }
+    let updatedEmployees;
+    if (employeeToEdit) {
+      updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
+    } else {
+      const newEmployee = { ...formData, id: uuidv4() };
+      updatedEmployees = [...employees, newEmployee];
+    }
 
-     setEmployees(updatedEmployees)
-      toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
+    setEmployees(updatedEmployees)
+    toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
 
-      setTimeout(() => navigate('/'), 2000);
+    setTimeout(() => navigate('/'), 2000);
   };
 
   // Form fields configuration
@@ -70,7 +70,7 @@ const AddEmployee = () => {
     <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
       <h3 className="text-2xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
-      <FormField fields={fields} formData={formData} onChange={handleChange} />
+        <FormField fields={fields} formData={formData} onChange={handleChange} />
         <button
           type="submit"
           className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500 w-full"

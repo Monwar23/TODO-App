@@ -1,44 +1,49 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useEffect, useState } from "react";
 import useLocalStorage from "../components/useLocalStorage";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import FormField from "../components/FormField";
+import { v4 as uuidv4 } from 'uuid';
 
 const AssignTasks = () => {
     // state declare
     const [employees] = useLocalStorage('employees', []);
     const [tasks, setTasks] = useLocalStorage('tasks', []);
-    const [selectedEmployee, setSelectedEmployee] = useState('');
-    const [taskDescription, setTaskDescription] = useState('');
+    const [formData, setFormData] = useState({
+        employeeId: '',
+        description: '',
+    });
     const [taskToEdit, setTaskToEdit] = useState(null);
 
-    // navigate other routes
+    // navigate
+
     const navigate = useNavigate();
+
     // find id from url
     const { id } = useParams();
 
-    //   // if find id from url then find the data
+    // load data by id
     useEffect(() => {
         if (id) {
-            const task = tasks.find(task => task.employeeId === id)
-            if (task && !taskToEdit) {
+            const task = tasks.find(task => task.id === id);
+            if (task) {
                 setTaskToEdit(task);
-                setSelectedEmployee(task.employeeId);
-                setTaskDescription(task.description);
+                setFormData({
+                    employeeId: task.employeeId,
+                    description: task.description,
+                });
             }
         }
-        
-    }, [id, taskToEdit,tasks,]);
+    }, [id, tasks]);
 
-    // find available employee
+    // check available employee
 
     const availableEmployees = employees.filter(employee =>
         !tasks.some(task => task.employeeId === employee.id && task.status !== 'Completed')
     );
 
-    // if task for edit then find and push available employee
-
+    // if for edit then push 
     if (taskToEdit) {
         const currentEmployee = employees.find(employee => employee.id === taskToEdit.employeeId);
         if (currentEmployee && !availableEmployees.some(emp => emp.id === currentEmployee.id)) {
@@ -46,101 +51,92 @@ const AssignTasks = () => {
         }
     }
 
-    // task form submit
+    // update data from form
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // submit data
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!selectedEmployee) {
-            toast.error('Please select an employee.');
-            return;
-        }
-        if (!taskDescription) {
-            toast.error('Please enter a task description.');
+        const { employeeId, description, duration } = formData;
+
+        if (!employeeId || !description || !duration) {
+            toast.error('Please fill all fields.');
             return;
         }
 
-        const selectedEmployeeData = employees.find(emp => emp.id === selectedEmployee);
+        const selectedEmployeeData = employees.find(emp => emp.id === employeeId);
 
-        // update task
         if (taskToEdit) {
-            const updatedTasks = tasks.map(task => task.employeeId === taskToEdit.employeeId ?
-                { ...task, employeeId: selectedEmployeeData.id, employeeName: selectedEmployeeData.name, description: taskDescription }
-                :
-                task
+            const updatedTasks = tasks.map(task =>
+                task.id === taskToEdit.id
+                    ? { ...task, employeeId, employeeName: selectedEmployeeData.name, description, duration }
+                    : task
             );
             setTasks(updatedTasks);
             toast.success('Task updated successfully!');
-        }
-        // add task
-        else {
+        } else {
             const newTask = {
-                employeeId: selectedEmployeeData.id,
+                employeeId,
                 employeeName: selectedEmployeeData.name,
                 employeeDesignation: selectedEmployeeData.designation,
-                description: taskDescription,
+                description,
                 status: 'Incomplete',
+                id: uuidv4(),
+                duration
             };
-
-            // Save task in localStorage
-
             setTasks([...tasks, newTask]);
-
             toast.success('Task assigned successfully!');
         }
-        // Reset form state
-        setSelectedEmployee('');
-        setTaskDescription('');
 
+        setFormData({ employeeId: '', description: '' });
         setTimeout(() => navigate('/tasks'), 2000);
     };
 
+    const fields = [
+        {
+            label: 'Employee*',
+            type: 'select',
+            name: 'employeeId',
+            options: availableEmployees.map(emp => ({
+                value: emp.id,
+                label: `${emp.name} - ${emp.designation}`,
+            })),
+            placeholder: 'Select an employee',
+            required: true,
+        },
+        {
+            label: 'Task Description*',
+            type: 'text',
+            name: 'description',
+            placeholder: 'Enter task description',
+            required: true,
+        },
+        {
+            label: 'Duration*',
+            type: 'text',
+            name: 'duration',
+            placeholder: 'Enter task duration',
+            required: true,
+        },
+    ];
+
     return (
         <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
-            <h3 className="text-2xl text-center font-medium text-gray-800"> {taskToEdit ? 'Update Task' : 'Assign Task'}</h3>
+            <h3 className="text-2xl text-center font-medium text-gray-800">
+                {taskToEdit ? 'Update Task' : 'Assign Task'}
+            </h3>
             <form onSubmit={handleSubmit} className="mt-4">
-                <div className="grid grid-cols-1 gap-4">
-                    <div>
-                        <label htmlFor="employee" className="block text-sm font-medium text-gray-700">
-                            Employee
-                        </label>
-                        <select
-                            id="employee"
-                            value={selectedEmployee}
-                            onChange={(e) => setSelectedEmployee(e.target.value)}
-                            required
-                            className="w-full border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-                        >
-                            <option value="">Select an employee</option>
-                            {availableEmployees.map((employee, index) => (
-                                <option key={index} value={employee.id}>
-                                    {employee.name} - {employee.designation}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="task" className="block text-sm font-medium text-gray-700">
-                            Task Description
-                        </label>
-                        <input
-                            type="text"
-                            id="task"
-                            value={taskDescription}
-                            onChange={(e) => setTaskDescription(e.target.value)}
-                            placeholder="Enter task description"
-                            required
-                            className="w-full border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-                        />
-                    </div>
-                    <div>
-                        <button
-                            type="submit"
-                            className="btn w-full border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
-                        >
-                            {taskToEdit ? 'Update Task' : 'Assign Task'}
-
-                        </button>
-                    </div>
-                </div>
+                <FormField fields={fields} formData={formData} onChange={handleChange} />
+                <button
+                    type="submit"
+                    className="btn w-full border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
+                >
+                    {taskToEdit ? 'Update Task' : 'Assign Task'}
+                </button>
             </form>
             <ToastContainer />
         </div>
