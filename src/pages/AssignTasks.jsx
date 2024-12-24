@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import FormField from "../components/FormField";
 import { v4 as uuidv4 } from 'uuid';
+import CommonButton from "../components/CommonButton";
 
 const AssignTasks = () => {
     // state declare
@@ -131,12 +132,9 @@ const AssignTasks = () => {
             </h3>
             <form onSubmit={handleSubmit} className="mt-4">
                 <FormField fields={fields} formData={formData} onChange={handleChange} />
-                <button
-                    type="submit"
-                    className="btn w-full border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
-                >
-                    {taskToEdit ? 'Update Task' : 'Assign Task'}
-                </button>
+                <CommonButton>
+                {taskToEdit ? 'Update Task' : 'Assign Task'}
+                </CommonButton>
             </form>
             <ToastContainer />
         </div>

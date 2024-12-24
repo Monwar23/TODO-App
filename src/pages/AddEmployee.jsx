@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 import { v4 as uuidv4 } from 'uuid';
 import FormField from '../components/FormField';
+import CommonButton from '../components/CommonButton';
 
 
 const AddEmployee = () => {
@@ -71,12 +72,9 @@ const AddEmployee = () => {
       <h3 className="text-2xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
         <FormField fields={fields} formData={formData} onChange={handleChange} />
-        <button
-          type="submit"
-          className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500 w-full"
-        >
-          {employeeToEdit ? 'Update Employee' : 'Add Employee'}
-        </button>
+        <CommonButton>
+        {employeeToEdit ? 'Update Employee' : 'Add Employee'}
+        </CommonButton>
       </form>
       <ToastContainer />
     </div>
