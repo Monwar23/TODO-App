@@ -84,7 +84,7 @@ const Tasks = () => {
                             <tr key={task.employeeId}>
 
                                 <td className="border px-4 py-2 text-center">{task.description}</td>
-                                <td className="border px-4 py-2 text-center">{task.employeeId} - {task.employeeName}</td>
+                                <td className="border px-4 py-2 text-center">{task.employeeName} - {task.employeeDesignation}</td>
                                 <td className="border px-4 py-2 text-center">
                                     <button
                                         onClick={() => toggleTaskStatus(task.employeeId)} className={`btn px-2 py-1 rounded-lg ${task.status === "Completed"

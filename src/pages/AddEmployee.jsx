@@ -3,11 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
+import { v4 as uuidv4 } from 'uuid'; 
+
 
 const AddEmployee = () => {
   // state declare
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     designation: '',
     email: '',
@@ -15,6 +16,7 @@ const AddEmployee = () => {
   });
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [employees, setEmployees] = useLocalStorage('employees', []);
+  
 // navigate other routes
   const navigate = useNavigate();
   // id from url
@@ -41,23 +43,18 @@ const AddEmployee = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const isDuplicate = employees.some((employee) => employee.id === formData.id && employee.id !== employeeToEdit?.id);
-
-    if (isDuplicate) {
-      toast.error('Employee ID already exists!');
-    } else {
       let updatedEmployees;
       if (employeeToEdit) {
         updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
       } else {
-        updatedEmployees = [...employees, formData];
+        const newEmployee = { ...formData, id: uuidv4() };
+        updatedEmployees = [...employees, newEmployee];
       }
 
      setEmployees(updatedEmployees)
       toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
 
       setTimeout(() => navigate('/'), 2000);
-    }
   };
 
   return (
@@ -65,16 +62,6 @@ const AddEmployee = () => {
       <h3 className="text-2xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
       <form onSubmit={handleSubmit} className="mt-4 ">
         <div className='grid grid-cols-1'>
-          <label htmlFor="id" className="block text-sm font-medium text-gray-700">Employee ID</label>
-          <input
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleChange}
-            placeholder="Employee ID"
-            required
-            className='border py-2 px-2 rounded-lg mt-1 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none'
-          />
           <label htmlFor="name" className="block text-sm mt-5 font-medium text-gray-700">Name</label>
           <input
             type="text"

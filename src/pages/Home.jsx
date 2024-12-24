@@ -64,7 +64,6 @@ const Home = () => {
                     <thead>
                         <tr>
                             <th className="border px-4 py-2 text-orange-500">Name</th>
-                            <th className="border px-4 py-2 text-orange-500">ID</th>
                             <th className="border px-4 py-2 text-orange-500">Designation</th>
                             <th className="border px-4 py-2 text-orange-500">Email</th>
                             <th className="border px-4 py-2 text-orange-500">Phone</th>
@@ -76,7 +75,6 @@ const Home = () => {
                             <tr key={employee.id}>
 
                                 <td className="border px-4 py-2 text-center">{employee.name}</td>
-                                <td className="border px-4 py-2 text-center">{employee.id}</td>
                                 <td className="border px-4 py-2 text-center">{employee.designation}</td>
                                 <td className="border px-4 py-2 text-center">{employee.email}</td>
                                 <td className="border px-4 py-2 text-center">{employee.phone}</td>

@@ -75,6 +75,7 @@ const AssignTasks = () => {
             const newTask = {
                 employeeId: selectedEmployeeData.id,
                 employeeName: selectedEmployeeData.name,
+                employeeDesignation: selectedEmployeeData.designation,
                 description: taskDescription,
                 status: 'Incomplete',
             };
@@ -111,7 +112,7 @@ const AssignTasks = () => {
                             <option value="">Select an employee</option>
                             {availableEmployees.map((employee, index) => (
                                 <option key={index} value={employee.id}>
-                                    {employee.id} - {employee.name}
+                                    {employee.name} - {employee.designation}
                                 </option>
                             ))}
                         </select>
