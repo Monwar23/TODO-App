@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 import NoData from "../components/NoData";
+import Table from "../components/Table";
 
 
 const Home = () => {
@@ -26,13 +27,10 @@ const Home = () => {
         setSearchTerm(term);
 
         const filtered = employees.filter((emp) =>
-            emp.name.toLowerCase().includes(term) ||
-            emp.id.toLowerCase().includes(term) ||
-            emp.email.toLowerCase().includes(term) ||
-            emp.phone.toLowerCase().includes(term) ||
-            emp.designation.toLowerCase().includes(term)
-
-        );
+            ["name", "id", "email", "phone", "designation"].some((key) =>
+              emp[key].toLowerCase().includes(term)
+            )
+          );
 
         setFilteredEmployees(filtered);
     };
@@ -51,6 +49,15 @@ const Home = () => {
         localStorage.setItem('employees', JSON.stringify(updatedEmployees));
     };
 
+
+  const columns = [
+    { header: "Name", accessor: (row) => row.name },
+    { header: "Designation", accessor: (row) => row.designation },
+    { header: "Email", accessor: (row) => row.email },
+    { header: "Phone", accessor: (row) => row.phone },
+    { header: "Task Assigned", accessor: (row) => getTaskCount(row.id) },
+  ];
+
     return (
         <div className="mt-5">
             <h2 className="text-center text-2xl font-medium">Employee List</h2>
@@ -67,47 +74,23 @@ const Home = () => {
             </div>
             {/* table of employees details */}
             {filteredEmployees.length > 0 ? (
-                <table className="table-auto border-collapse mt-4 w-2/3 mx-auto">
-                    <thead>
-                        <tr>
-                            <th className="border px-4 py-2 text-orange-500">Name</th>
-                            <th className="border px-4 py-2 text-orange-500">Designation</th>
-                            <th className="border px-4 py-2 text-orange-500">Email</th>
-                            <th className="border px-4 py-2 text-orange-500">Phone</th>
-                            <th className="border px-4 py-2 text-orange-500">Task Assigned</th>
-                            <th className="border px-4 py-2 text-orange-500">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredEmployees.map((employee) => (
-                            <tr key={employee.id}>
-
-                                <td className="border px-4 py-2 text-center">{employee.name}</td>
-                                <td className="border px-4 py-2 text-center">{employee.designation}</td>
-                                <td className="border px-4 py-2 text-center">{employee.email}</td>
-                                <td className="border px-4 py-2 text-center">{employee.phone}</td>
-                                <td className="border px-4 py-2 text-center">
-                                    {getTaskCount(employee.id)}
-                                </td>
-                                <td className="border px-4 py-2">
-                                    <div className="flex justify-center items-center ">
-                                        <Link to={`/addEmployee/${employee.id}`}
-                                            className="text-orange-500 "
-                                        >
-                                            <FaRegEdit />
-                                        </Link>
-                                        <button
-                                            onClick={() => deleteEmployee(employee.id)}
-                                            className="text-orange-500 ml-2"
-                                        >
-                                            <RiDeleteBin5Fill />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <Table
+                columns={columns}
+                data={filteredEmployees}
+                renderActions={(employee) => (
+                  <>
+                    <Link to={`/addEmployee/${employee.id}`} className="text-orange-500">
+                      <FaRegEdit />
+                    </Link>
+                    <button
+                      onClick={() => deleteEmployee(employee.id)}
+                      className="text-orange-500 ml-2"
+                    >
+                      <RiDeleteBin5Fill />
+                    </button>
+                  </>
+                )}
+              />
             ) : (
                 <NoData></NoData>
                 )}

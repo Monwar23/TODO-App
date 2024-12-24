@@ -73,7 +73,7 @@ const AddEmployee = () => {
       <FormField fields={fields} formData={formData} onChange={handleChange} />
         <button
           type="submit"
-          className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500"
+          className="btn border py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500 w-full"
         >
           {employeeToEdit ? 'Update Employee' : 'Add Employee'}
         </button>

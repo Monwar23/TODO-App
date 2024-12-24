@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 import { useState } from "react";
 import NoData from "../components/NoData";
+import Table from "../components/Table";
 
 const Tasks = () => {
     const [tasks, setTasks] = useLocalStorage("tasks", []);
@@ -40,13 +41,30 @@ const Tasks = () => {
     const filteredTasks = tasks.filter((task) => {
         const statusFilter = filter === "All" || task.status === filter;
 
-        const statusSearch = task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            task.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            task.employeeId.toString().includes(searchTerm);
+        const statusSearch = ["description", "employeeName", "employeeId"].some((key) =>
+            task[key].toLowerCase().includes(searchTerm.toLowerCase())
+          );
 
         return statusFilter && statusSearch;
 
     })
+
+    const columns = [
+        { header: "Task", accessor: (row) => row.description },
+        { header: "Employee", accessor: (row) => `${row.employeeName} - ${row.employeeDesignation}` },
+        { header: "Status", accessor: (row) => (
+            <button
+              onClick={() => toggleTaskStatus(row.employeeId)}
+              className={`btn px-2 py-1 rounded-lg ${
+                row.status === "Completed" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
+              }`}
+            >
+              {row.status}
+            </button>
+          )
+        },
+      ];
+
     return (
         <div className="mt-5">
             <h2 className="text-2xl font-medium text-center">
@@ -71,48 +89,23 @@ const Tasks = () => {
                 />
             </div>
             {filteredTasks.length > 0 ? (
-                <table className="table-auto border-collapse mt-4 w-2/3 mx-auto">
-                    <thead>
-                        <tr>
-                            <th className="border px-4 py-2 text-orange-500">Task</th>
-                            <th className="border px-4 py-2 text-orange-500">Employee</th>
-                            <th className="border px-4 py-2 text-orange-500">Status</th>
-                            <th className="border px-4 py-2 text-orange-500">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredTasks.map((task) => (
-                            <tr key={task.employeeId}>
-
-                                <td className="border px-4 py-2 text-center">{task.description}</td>
-                                <td className="border px-4 py-2 text-center">{task.employeeName} - {task.employeeDesignation}</td>
-                                <td className="border px-4 py-2 text-center">
-                                    <button
-                                        onClick={() => toggleTaskStatus(task.employeeId)} className={`btn px-2 py-1 rounded-lg ${task.status === "Completed"
-                                            ? "bg-green-500 text-white"
-                                            : "bg-orange-500 text-white"
-                                            }`}
-                                    >{task.status}</button>
-                                </td>
-                                <td className="border px-4 py-2">
-                                    <div className="flex justify-center items-center ">
-                                        <Link to={`/assignTasks/${task.employeeId}`}
-                                            className="text-orange-500 "
-                                        >
-                                            <FaRegEdit />
-                                        </Link>
-                                        <button
-                                            onClick={() => deleteTask(task.employeeId)}
-                                            className="text-orange-500 ml-2"
-                                        >
-                                            <RiDeleteBin5Fill />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+              <Table
+              columns={columns}
+              data={filteredTasks}
+              renderActions={(task) => (
+                <>
+                  <Link to={`/assignTasks/${task.employeeId}`} className="text-orange-500">
+                    <FaRegEdit />
+                  </Link>
+                  <button
+                    onClick={() => deleteTask(task.employeeId)}
+                    className="text-orange-500 ml-2"
+                  >
+                    <RiDeleteBin5Fill />
+                  </button>
+                </>
+              )}
+            />
             ) : (
                <NoData></NoData>
             )}
