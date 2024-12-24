@@ -10,6 +10,7 @@ import useLocalStorage from "../components/useLocalStorage";
 const Home = () => {
     // state declare
     const [employees, setEmployees] = useLocalStorage('employees', []);
+    const [tasks] = useLocalStorage('tasks', []);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredEmployees, setFilteredEmployees] = useState([]);
 
@@ -34,6 +35,11 @@ const Home = () => {
 
         setFilteredEmployees(filtered);
     };
+    // task count
+    const getTaskCount = (employeeId) => {
+        return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
+    };
+
 
     // delete operation
     const deleteEmployee = (id) => {
@@ -67,6 +73,7 @@ const Home = () => {
                             <th className="border px-4 py-2 text-orange-500">Designation</th>
                             <th className="border px-4 py-2 text-orange-500">Email</th>
                             <th className="border px-4 py-2 text-orange-500">Phone</th>
+                            <th className="border px-4 py-2 text-orange-500">Task Assigned</th>
                             <th className="border px-4 py-2 text-orange-500">Action</th>
                         </tr>
                     </thead>
@@ -78,6 +85,9 @@ const Home = () => {
                                 <td className="border px-4 py-2 text-center">{employee.designation}</td>
                                 <td className="border px-4 py-2 text-center">{employee.email}</td>
                                 <td className="border px-4 py-2 text-center">{employee.phone}</td>
+                                <td className="border px-4 py-2 text-center">
+                                    {getTaskCount(employee.id)}
+                                </td>
                                 <td className="border px-4 py-2">
                                     <div className="flex justify-center items-center ">
                                         <Link to={`/addEmployee/${employee.id}`}
