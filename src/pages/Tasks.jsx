@@ -43,7 +43,7 @@ const Tasks = () => {
 
         const statusSearch = ["description", "employeeName", "employeeId"].some((key) =>
             task[key].toLowerCase().includes(searchTerm.toLowerCase())
-          );
+        );
 
         return statusFilter && statusSearch;
 
@@ -52,18 +52,18 @@ const Tasks = () => {
     const columns = [
         { header: "Task", accessor: (row) => row.description },
         { header: "Employee", accessor: (row) => `${row.employeeName} - ${row.employeeDesignation}` },
-        { header: "Status", accessor: (row) => (
-            <button
-              onClick={() => toggleTaskStatus(row.employeeId)}
-              className={`btn px-2 py-1 rounded-lg ${
-                row.status === "Completed" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
-              }`}
-            >
-              {row.status}
-            </button>
-          )
+        {
+            header: "Status", accessor: (row) => (
+                <button
+                    onClick={() => toggleTaskStatus(row.employeeId)}
+                    className={`btn px-2 py-1 rounded-lg ${row.status === "Completed" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
+                        }`}
+                >
+                    {row.status}
+                </button>
+            )
         },
-      ];
+    ];
 
     return (
         <div className="mt-5">
@@ -89,25 +89,31 @@ const Tasks = () => {
                 />
             </div>
             {filteredTasks.length > 0 ? (
-              <Table
-              columns={columns}
-              data={filteredTasks}
-              renderActions={(task) => (
-                <>
-                  <Link to={`/assignTasks/${task.employeeId}`} className="text-orange-500">
-                    <FaRegEdit />
-                  </Link>
-                  <button
-                    onClick={() => deleteTask(task.employeeId)}
-                    className="text-orange-500 ml-2"
-                  >
-                    <RiDeleteBin5Fill />
-                  </button>
-                </>
-              )}
-            />
+                <Table
+                    columns={columns}
+                    data={filteredTasks}
+                    renderActions={(task) => (
+                        <>
+                            {task.status !== "Completed" ? (
+                                <Link to={`/assignTasks/${task.employeeId}`} className="text-orange-500">
+                                    <FaRegEdit />
+                                </Link>
+                            ) : (
+                                <span className="text-orange-500 cursor-not-allowed" title="Task is completed and cannot be edited">
+                                    <FaRegEdit />
+                                </span>
+                            )}
+                            <button
+                                onClick={() => deleteTask(task.employeeId)}
+                                className="text-orange-500 ml-2"
+                            >
+                                <RiDeleteBin5Fill />
+                            </button>
+                        </>
+                    )}
+                />
             ) : (
-               <NoData></NoData>
+                <NoData></NoData>
             )}
             <ToastContainer></ToastContainer>
         </div>
