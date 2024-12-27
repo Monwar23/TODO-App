@@ -14,6 +14,7 @@ const AssignTasks = () => {
     const [formData, setFormData] = useState({
         employeeId: '',
         description: '',
+        duration: '',
     });
     const [taskToEdit, setTaskToEdit] = useState(null);
 
@@ -33,6 +34,7 @@ const AssignTasks = () => {
                 setFormData({
                     employeeId: task.employeeId,
                     description: task.description,
+                    duration: task.duration,
                 });
             }
         }
