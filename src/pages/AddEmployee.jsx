@@ -49,7 +49,7 @@ const AddEmployee = () => {
     if (employeeToEdit) {
       updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
     } else {
-      const newEmployee = { ...formData, id: uuidv4() };
+      const newEmployee = { ...formData, id: uuidv4(),activeStatus: 'Available', };
       updatedEmployees = [...employees, newEmployee];
     }
 

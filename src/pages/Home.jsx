@@ -39,6 +39,27 @@ const Home = () => {
         return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
     };
 
+     // toggle available or unavailable
+     const toggleEmployeeStatus = (id) => {
+      const employee = employees.find((emp) => emp.id === id);
+    const taskCount = getTaskCount(id);
+
+    if (employee.activeStatus === "Available" && taskCount > 0) {
+        toast.error("Please assign your tasks to other employees before marking unavailable!");
+        return;
+    }
+      const updatedEmployee = employees.map((employee) => {
+          if (employee.id === id) {
+              return {
+                  ...employee,
+                  activeStatus: employee.activeStatus === "Available" ? "Unavailable" : "Available"
+              }
+          }
+          return employee
+      });
+      setEmployees(updatedEmployee);
+      toast.info("Task Status Updated!");
+  }
 
     // delete operation
     const deleteEmployee = (id) => {
@@ -56,6 +77,15 @@ const Home = () => {
     { header: "Email", accessor: (row) => row.email },
     { header: "Phone", accessor: (row) => row.phone },
     { header: "Task Assigned", accessor: (row) => getTaskCount(row.id) },
+    { header: "Status", accessor: (row) =>(
+      <button
+          onClick={() => toggleEmployeeStatus(row.id)}
+          className={`btn px-2 py-1 rounded-lg ${row.activeStatus === "Available" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
+              }`}
+      >
+          {row.activeStatus}
+      </button>
+  ) },
   ];
 
     return (
