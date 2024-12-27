@@ -5,17 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 import { v4 as uuidv4 } from 'uuid';
 import FormField from '../components/FormField';
-import CommonButton from '../components/CommonButton';
 
 
 const AddEmployee = () => {
   // state declare
-  const [formData, setFormData] = useState({
-    name: '',
-    designation: '',
-    email: '',
-    phone: '',
-  });
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [employees, setEmployees] = useLocalStorage('employees', []);
 
@@ -29,35 +22,10 @@ const AddEmployee = () => {
     if (id) {
       const employee = employees.find(emp => emp.id === id);
       if (employee) {
-        setFormData(employee);
         setEmployeeToEdit(employee);
       }
     }
   }, [id, employees])
-
-  // update form data
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  // submit data
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    let updatedEmployees;
-    if (employeeToEdit) {
-      updatedEmployees = employees.map(emp => emp.id === employeeToEdit.id ? formData : emp);
-    } else {
-      const newEmployee = { ...formData, id: uuidv4(),activeStatus: 'Available', };
-      updatedEmployees = [...employees, newEmployee];
-    }
-
-    setEmployees(updatedEmployees)
-    toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
-
-    setTimeout(() => navigate('/'), 2000);
-  };
 
   // Form fields configuration
   const fields = [
@@ -70,12 +38,24 @@ const AddEmployee = () => {
   return (
     <div className='p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg'>
       <h3 className="text-2xl text-center font-medium ">{employeeToEdit ? 'Update Employee Profile' : 'Add New Employee Profile'}</h3>
-      <form onSubmit={handleSubmit} className="mt-4 ">
-        <FormField fields={fields} formData={formData} onChange={handleChange} />
-        <CommonButton>
-        {employeeToEdit ? 'Update Employee' : 'Add Employee'}
-        </CommonButton>
-      </form>
+      <FormField
+        fields={fields}
+        initialValues={employeeToEdit || {}}
+        onSubmit={(data) => {
+          let updatedEmployees;
+          if (employeeToEdit) {
+            updatedEmployees = employees.map((emp) =>
+              emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id } : emp
+            );
+          } else {
+            const newEmployee = { ...data, id: uuidv4(), activeStatus: 'Available' };
+            updatedEmployees = [...employees, newEmployee];
+          }
+          setEmployees(updatedEmployees);
+          toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
+          setTimeout(() => navigate('/'), 2000);
+        }}
+      />
       <ToastContainer />
     </div>
 
