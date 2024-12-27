@@ -43,9 +43,8 @@ const AssignTasks = () => {
     // check available employee
 
     const availableEmployees = employees.filter(employee =>
-        !tasks.some(task => task.employeeId === employee.id && task.status !== 'Completed')
-    );
-
+        employee.activeStatus === 'Available'
+    )
     // if for edit then push 
     if (taskToEdit) {
         const currentEmployee = employees.find(employee => employee.id === taskToEdit.employeeId);
@@ -95,7 +94,7 @@ const AssignTasks = () => {
             toast.success('Task assigned successfully!');
         }
 
-        setFormData({ employeeId: '', description: '' });
+        setFormData({ employeeId: '', description: '', duration: '' });
         setTimeout(() => navigate('/tasks'), 2000);
     };
 
