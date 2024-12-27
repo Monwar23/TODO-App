@@ -45,7 +45,7 @@ const AddEmployee = () => {
           let updatedEmployees;
           if (employeeToEdit) {
             updatedEmployees = employees.map((emp) =>
-              emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id } : emp
+              emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id ,activeStatus: employeeToEdit.activeStatus} : emp
             );
           } else {
             const newEmployee = { ...data, id: uuidv4(), activeStatus: 'Available' };
