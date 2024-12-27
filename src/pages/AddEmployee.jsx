@@ -28,6 +28,14 @@ const AddEmployee = () => {
   }, [id, employees])
 
   const handleSubmit=(data) => {
+
+    const emailExists = employees.some(emp => emp.email === data.email);
+
+  if (emailExists) {
+    toast.error('This email is already exist an employee. Please enter a different email.');
+    return; 
+  }
+
     let updatedEmployees;
     if (employeeToEdit) {
       updatedEmployees = employees.map((emp) =>
