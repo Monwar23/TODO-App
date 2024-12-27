@@ -27,6 +27,21 @@ const AddEmployee = () => {
     }
   }, [id, employees])
 
+  const handleSubmit=(data) => {
+    let updatedEmployees;
+    if (employeeToEdit) {
+      updatedEmployees = employees.map((emp) =>
+        emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id ,activeStatus: employeeToEdit.activeStatus} : emp
+      );
+    } else {
+      const newEmployee = { ...data, id: uuidv4(), activeStatus: 'Available' };
+      updatedEmployees = [...employees, newEmployee];
+    }
+    setEmployees(updatedEmployees);
+    toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
+    setTimeout(() => navigate('/'), 2000);
+  }
+
   // Form fields configuration
   const fields = [
     { label: 'Name*', type: 'text', name: 'name', placeholder: 'Enter Name', required: true },
@@ -41,20 +56,7 @@ const AddEmployee = () => {
       <FormField
         fields={fields}
         initialValues={employeeToEdit || {}}
-        onSubmit={(data) => {
-          let updatedEmployees;
-          if (employeeToEdit) {
-            updatedEmployees = employees.map((emp) =>
-              emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id ,activeStatus: employeeToEdit.activeStatus} : emp
-            );
-          } else {
-            const newEmployee = { ...data, id: uuidv4(), activeStatus: 'Available' };
-            updatedEmployees = [...employees, newEmployee];
-          }
-          setEmployees(updatedEmployees);
-          toast.success(employeeToEdit ? 'Employee updated successfully!' : 'Employee added successfully!');
-          setTimeout(() => navigate('/'), 2000);
-        }}
+        onSubmit={handleSubmit}
       />
       <ToastContainer />
     </div>

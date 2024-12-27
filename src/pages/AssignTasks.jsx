@@ -42,74 +42,76 @@ const AssignTasks = () => {
         }
     }
 
-    const fields = [
-        {
-            label: 'Employee*',
-            type: 'select',
-            name: 'employeeId',
-            options: availableEmployees.map(emp => ({
-                value: emp.id,
-                label: `${emp.name} - ${emp.designation}`,
-            })),
-            placeholder: 'Select an employee',
-            required: true,
-        },
-        {
-            label: 'Task Description*',
-            type: 'text',
-            name: 'description',
-            placeholder: 'Enter task description',
-            required: true,
-        },
-        {
-            label: 'Duration*',
-            type: 'text',
-            name: 'duration',
-            placeholder: 'Enter task duration',
-            required: true,
-        },
-    ];
+    const handleSubmit = (data) => {
+        const { employeeId, description, duration } = data;
+        const selectedEmployeeData = employees.find((emp) => emp.id === employeeId);
 
-    return (
-        <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
-            <h3 className="text-2xl text-center font-medium text-gray-800">
-                {taskToEdit ? 'Update Task' : 'Assign Task'}
-            </h3>
-            <FormField
-                fields={fields}
-                initialValues={taskToEdit || {}}
-                onSubmit={(data) => {
-                    const { employeeId, description, duration } = data;
-                    const selectedEmployeeData = employees.find((emp) => emp.id === employeeId);
+        if (taskToEdit) {
+            const updatedTasks = tasks.map((task) =>
+                task.id === taskToEdit.id
+                    ? { ...task, employeeId, employeeName: selectedEmployeeData.name, description, duration }
+                    : task
+            );
+            setTasks(updatedTasks);
+            toast.success('Task updated successfully!');
+        } else {
+            const newTask = {
+                employeeId,
+                employeeName: selectedEmployeeData.name,
+                employeeDesignation: selectedEmployeeData.designation,
+                description,
+                status: 'Incomplete',
+                id: uuidv4(),
+                duration,
+            };
+            setTasks([...tasks, newTask]);
+            toast.success('Task assigned successfully!');
+        }
 
-                    if (taskToEdit) {
-                        const updatedTasks = tasks.map((task) =>
-                            task.id === taskToEdit.id
-                                ? { ...task, employeeId, employeeName: selectedEmployeeData.name, description, duration }
-                                : task
-                        );
-                        setTasks(updatedTasks);
-                        toast.success('Task updated successfully!');
-                    } else {
-                        const newTask = {
-                            employeeId,
-                            employeeName: selectedEmployeeData.name,
-                            employeeDesignation: selectedEmployeeData.designation,
-                            description,
-                            status: 'Incomplete',
-                            id: uuidv4(),
-                            duration,
-                        };
-                        setTasks([...tasks, newTask]);
-                        toast.success('Task assigned successfully!');
-                    }
+        setTimeout(() => navigate('/tasks'), 2000);
+    }
 
-                    setTimeout(() => navigate('/tasks'), 2000);
-                }}
-            />
-            <ToastContainer />
-        </div>
-    );
+const fields = [
+    {
+        label: 'Employee*',
+        type: 'select',
+        name: 'employeeId',
+        options: availableEmployees.map(emp => ({
+            value: emp.id,
+            label: `${emp.name} - ${emp.designation}`,
+        })),
+        placeholder: 'Select an employee',
+        required: true,
+    },
+    {
+        label: 'Task Description*',
+        type: 'text',
+        name: 'description',
+        placeholder: 'Enter task description',
+        required: true,
+    },
+    {
+        label: 'Duration*',
+        type: 'text',
+        name: 'duration',
+        placeholder: 'Enter task duration',
+        required: true,
+    },
+];
+
+return (
+    <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
+        <h3 className="text-2xl text-center font-medium text-gray-800">
+            {taskToEdit ? 'Update Task' : 'Assign Task'}
+        </h3>
+        <FormField
+            fields={fields}
+            initialValues={taskToEdit || {}}
+            onSubmit={handleSubmit}
+        />
+        <ToastContainer />
+    </div>
+);
 };
 
 export default AssignTasks;
