@@ -29,10 +29,10 @@ const AddEmployee = () => {
 
   const handleSubmit=(data) => {
 
-    const emailExists = employees.some(emp => emp.email === data.email);
+    const emailExists = employees.some(emp => emp.email === data.email && emp.id !== (employeeToEdit?.id || ''));
 
   if (emailExists) {
-    toast.error('This email is already exist an employee. Please enter a different email.');
+    toast.error('This email is already exist for another employee. Please enter a different email.');
     return; 
   }
 
