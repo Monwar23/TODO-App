@@ -7,13 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
 import NoData from "../components/NoData";
 import Table from "../components/Table";
+import SearchBar from "../components/SearchBar";
 
 
 const Home = () => {
     // state declare
     const [employees, setEmployees] = useLocalStorage('employees', []);
     const [tasks] = useLocalStorage('tasks', []);
-    const [searchTerm, setSearchTerm] = useState("");
     const [filteredEmployees, setFilteredEmployees] = useState([]);
 
     // data load from local Storage
@@ -21,19 +21,6 @@ const Home = () => {
         setFilteredEmployees(employees);
     }, [employees]);
 
-    // search functionality
-    const handleSearch = (event) => {
-        const term = event.target.value.toLowerCase();
-        setSearchTerm(term);
-
-        const filtered = employees.filter((emp) =>
-            ["name", "id", "email", "phone", "designation"].some((key) =>
-              emp[key].toLowerCase().includes(term)
-            )
-          );
-
-        setFilteredEmployees(filtered);
-    };
     // task count
     const getTaskCount = (employeeId) => {
         return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
@@ -93,15 +80,13 @@ const Home = () => {
             <h2 className="text-center text-2xl font-medium">Employee List</h2>
 
             {/* Input box for search*/}
-            <div className="flex justify-center mt-4">
-                <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    placeholder="Search by ID, Name, Email or Phone"
-                    className="border py-2 px-4 border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
-                />
-            </div>
+            <SearchBar
+             data={employees}
+             onFilter={setFilteredEmployees}
+             keys={["name", "id", "email", "phone", "designation"]}
+             placeholder="Search by ID, Name, Email or Phone"
+            />
+
             {/* table of employees details */}
             {filteredEmployees.length > 0 ? (
                 <Table

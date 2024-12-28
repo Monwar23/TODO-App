@@ -7,17 +7,20 @@ import useLocalStorage from "../components/useLocalStorage";
 import { useState } from "react";
 import NoData from "../components/NoData";
 import Table from "../components/Table";
+import SearchBar from "../components/SearchBar";
 
 const Tasks = () => {
     const [tasks, setTasks] = useLocalStorage("tasks", []);
     const [filter, setFilter] = useState("All");
-    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredTasks, setFilteredTasks] = useState(tasks);
+
 
 
     // delete task
     const deleteTask = (id) => {
         const updateTasks = tasks.filter((task) => task.id !== id);
         setTasks(updateTasks);
+        setFilteredTasks(updateTasks);
         toast.success('Task Deleted Successfully!');
 
     }
@@ -34,20 +37,13 @@ const Tasks = () => {
             return task
         });
         setTasks(updatedTasks);
+        setFilteredTasks(updatedTasks);
         toast.info("Task Status Updated!");
     }
 
-    // Filter tasks based on selected status and search function
-    const filteredTasks = tasks.filter((task) => {
-        const statusFilter = filter === "All" || task.status === filter;
-
-        const statusSearch = ["description", "employeeName", "employeeId"].some((key) =>
-            task[key].toLowerCase().includes(searchTerm.toLowerCase())
-        );
-
-        return statusFilter && statusSearch;
-
-    })
+    const filteredByStatus = (filter === "All") 
+    ? filteredTasks 
+    : filteredTasks.filter(task => task.status === filter);
 
     // table data details
 
@@ -73,9 +69,9 @@ const Tasks = () => {
             <h2 className="text-2xl font-medium text-center">
                 Task list
             </h2>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center ">
                 <select
-                    className="border px-4 py-2 border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    className="border px-4 mt-4 mr-4 max-h-12 border-orange-500 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                 >
@@ -83,18 +79,17 @@ const Tasks = () => {
                     <option value="Incomplete">Incomplete</option>
                     <option value="Completed">Completed</option>
                 </select>
-                <input
-                    type="text"
-                    className="border px-4 py-2 rounded-lg ml-4 border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none"
-                    placeholder="Search tasks"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                <SearchBar
+                data={tasks}
+                onFilter={setFilteredTasks}
+                keys={["description", "employeeName", "employeeId"]}
+                placeholder="Search tasks"
+            />
             </div>
-            {filteredTasks.length > 0 ? (
+            {filteredByStatus.length > 0 ? (
                 <Table
                     columns={columns}
-                    data={filteredTasks}
+                    data={filteredByStatus}
                     renderActions={(task) => (
                         <>
                             {task.status !== "Completed" ? (
