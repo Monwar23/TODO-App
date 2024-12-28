@@ -8,21 +8,20 @@ import { useState } from "react";
 import NoData from "../components/NoData";
 import Table from "../components/Table";
 import SearchBar from "../components/SearchBar";
+import useDeleteItem from "../components/useDeleteItem";
 
 const Tasks = () => {
     const [tasks, setTasks] = useLocalStorage("tasks", []);
     const [filter, setFilter] = useState("All");
     const [filteredTasks, setFilteredTasks] = useState(tasks);
+    const deleteItem = useDeleteItem();
 
 
 
     // delete task
     const deleteTask = (id) => {
-        const updateTasks = tasks.filter((task) => task.id !== id);
-        setTasks(updateTasks);
-        setFilteredTasks(updateTasks);
-        toast.success('Task Deleted Successfully!');
-
+        const updatedTasks = deleteItem(tasks, setTasks, id, "tasks", "Task Deleted Successfully!");
+        setFilteredTasks(updatedTasks); 
     }
 
     // toggle complete or incomplete

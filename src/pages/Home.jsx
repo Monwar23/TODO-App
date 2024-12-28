@@ -8,6 +8,7 @@ import useLocalStorage from "../components/useLocalStorage";
 import NoData from "../components/NoData";
 import Table from "../components/Table";
 import SearchBar from "../components/SearchBar";
+import useDeleteItem from "../components/useDeleteItem";
 
 
 const Home = () => {
@@ -15,6 +16,8 @@ const Home = () => {
     const [employees, setEmployees] = useLocalStorage('employees', []);
     const [tasks] = useLocalStorage('tasks', []);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
+    const deleteItem = useDeleteItem();
+
 
     // data load from local Storage
     useEffect(() => {
@@ -50,11 +53,8 @@ const Home = () => {
 
     // delete operation
     const deleteEmployee = (id) => {
-        const updatedEmployees = employees.filter((emp) => emp.id !== id);
-        setEmployees(updatedEmployees);
-        setFilteredEmployees(updatedEmployees);
-        toast.success('Employee Deleted successfully!');
-        localStorage.setItem('employees', JSON.stringify(updatedEmployees));
+      const updatedEmployees = deleteItem(employees, setEmployees, id, "employees", "Employee Deleted Successfully!");
+      setFilteredEmployees(updatedEmployees); 
     };
 
 
