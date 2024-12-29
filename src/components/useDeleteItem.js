@@ -14,7 +14,7 @@ const useDeleteItem = () => {
     // Show a toast notification
     toast.success(successMessage);
 
-    return updatedItems; 
+    return updatedItems;
   };
 
   return deleteItem;
