@@ -12,9 +12,7 @@ const AssignTasks = () => {
     const [employees] = useLocalStorage('employees', []);
     const [tasks, setTasks] = useLocalStorage('tasks', []);
     const [taskToEdit, setTaskToEdit] = useState(null);
-    const { leaves} = useContext(LeaveContext);
-    // console.log(leaves);
-
+    
     // navigate
 
     const navigate = useNavigate();
