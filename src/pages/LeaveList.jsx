@@ -8,11 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import NoData from '../components/NoData';
 import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
+import useLocalStorage from '../components/useLocalStorage';
 
 const LeaveList = () => {
-    const { leaves,updateLeave, deleteLeave,tasks } = useContext(LeaveContext);
+    const { leaves, updateLeave, deleteLeave, tasks } = useContext(LeaveContext);
     const [filteredLeaves, setFilteredLeaves] = useState([]);
-    const navigate=useNavigate()
+    const navigate = useNavigate()
+    const [employees, setEmployees] = useLocalStorage('employees', []);
+
 
     // Load leaves into filteredLeaves
     useEffect(() => {
@@ -40,13 +43,24 @@ const LeaveList = () => {
             setTimeout(() => navigate("/tasks"), 2000);
             return;
         }
+        const newLeaveStatus = leave.status === 'Pending' ? 'Approved' : 'Pending';
 
-        const updatedLeave = {
-            ...leave,
-            status: leave.status === 'Pending' ? 'Approved' : 'Pending'
-        };
-
+        // Update the leave status
+        const updatedLeave = { ...leave, status: newLeaveStatus };
         updateLeave(updatedLeave);
+
+        // Update the employee's activeStatus based on the leave status
+        const updatedEmployees = employees.map(employee => {
+            if (employee.id === leave.employeeId) {
+                return {
+                    ...employee,
+                    activeStatus: newLeaveStatus === 'Pending' ? 'Available' : 'Unavailable',
+                };
+            }
+            return employee;
+        });
+
+        setEmployees(updatedEmployees);
         toast.info('Leave status updated!');
     };
 
@@ -56,9 +70,9 @@ const LeaveList = () => {
         { header: 'Leave Type', accessor: (item) => item.leaveType },
         { header: 'Start Leave', accessor: (item) => item.startDate },
         { header: 'End Leave', accessor: (item) => item.endDate },
-        { header: 'Assigned Tasks', accessor: (item) => getTaskCount(item.employeeId) }, 
-        { 
-            header: 'Status', 
+        { header: 'Assigned Tasks', accessor: (item) => getTaskCount(item.employeeId) },
+        {
+            header: 'Status',
             accessor: (item) => (
                 <button
                     onClick={() => toggleLeaveStatus(item.id)}
@@ -74,11 +88,11 @@ const LeaveList = () => {
     return (
         <div className='mt-5'>
             <div className='flex items-center justify-center'>
-            <Link to="/addLeaves" className="-ml-64 font-medium"><button className='btn border font-medium py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500'>Add Leave</button></Link>
-                
+                <Link to="/addLeaves" className="-ml-64 font-medium"><button className='btn border font-medium py-2 px-2 mt-5 rounded-lg hover:border-orange-500 hover:bg-white bg-orange-500 text-white hover:text-orange-500'>Add Leave</button></Link>
+
                 <h2 className="ml-36 text-center text-2xl font-medium">Leave List</h2>
             </div>
-                        
+
             {/* Search Bar for filtering the leaves */}
             <SearchBar
                 data={leaves}

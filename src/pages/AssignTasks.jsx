@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useLocalStorage from "../components/useLocalStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import FormField from "../components/FormField";
 import { v4 as uuidv4 } from 'uuid';
+import LeaveContext from "../context/LeaveContext";
 
 const AssignTasks = () => {
     // state declare
     const [employees] = useLocalStorage('employees', []);
     const [tasks, setTasks] = useLocalStorage('tasks', []);
     const [taskToEdit, setTaskToEdit] = useState(null);
+    const { leaves} = useContext(LeaveContext);
+    // console.log(leaves);
 
     // navigate
 
