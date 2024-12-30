@@ -40,10 +40,7 @@ const LeaveList = () => {
                 
                 <h2 className="ml-36 text-center text-2xl font-medium">Leave List</h2>
             </div>
-            
-
-            {/* Add Leave button */}
-            
+                        
             {/* Search Bar for filtering the leaves */}
             <SearchBar
                 data={leaves}
