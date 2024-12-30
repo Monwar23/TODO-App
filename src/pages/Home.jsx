@@ -17,6 +17,7 @@ const Home = () => {
     const [tasks] = useLocalStorage('tasks', []);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const deleteItem = useDeleteItem();
+    
 
 
     // data load from local Storage
@@ -48,7 +49,7 @@ const Home = () => {
           return employee
       });
       setEmployees(updatedEmployee);
-      toast.info("Task Status Updated!");
+      toast.info("Employee Status Updated!");
   }
 
     // delete operation

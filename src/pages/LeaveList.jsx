@@ -10,7 +10,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 
 const LeaveList = () => {
-    const { leaves, deleteLeave,tasks } = useContext(LeaveContext);
+    const { leaves,updateLeave, deleteLeave,tasks } = useContext(LeaveContext);
     const [filteredLeaves, setFilteredLeaves] = useState([]);
 
     // Load leaves into filteredLeaves
@@ -29,6 +29,25 @@ const LeaveList = () => {
         return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
     };
 
+    // Toggle leave status
+    const toggleLeaveStatus = (id) => {
+        const leave = leaves.find(l => l.id === id);
+        const taskCount = getTaskCount(leave.employeeId);
+
+        if (leave.status === 'Pending' && taskCount > 0) {
+            toast.error('Please complete assigned tasks or reassigned other available employee before approving leave!');
+            return;
+        }
+
+        const updatedLeave = {
+            ...leave,
+            status: leave.status === 'Pending' ? 'Approved' : 'Pending'
+        };
+
+        updateLeave(updatedLeave);
+        toast.info('Leave status updated!');
+    };
+
     const columns = [
         { header: 'Employee Name', accessor: (item) => item.employeeName },
         { header: 'Designation', accessor: (item) => item.employeeDesignation },
@@ -36,6 +55,17 @@ const LeaveList = () => {
         { header: 'Start Leave', accessor: (item) => item.startDate },
         { header: 'End Leave', accessor: (item) => item.endDate },
         { header: 'Assigned Tasks', accessor: (item) => getTaskCount(item.employeeId) }, 
+        { 
+            header: 'Status', 
+            accessor: (item) => (
+                <button
+                    onClick={() => toggleLeaveStatus(item.id)}
+                    className={`btn px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-500 text-white' : 'bg-green-500 text-white'}`}
+                >
+                    {item.status}
+                </button>
+            )
+        }
 
     ];
 
@@ -59,9 +89,15 @@ const LeaveList = () => {
                 <Table columns={columns} data={filteredLeaves}
                     renderActions={(leave) => (
                         <>
-                            <Link to={`/addLeaves/${leave.id}`} className="text-orange-500">
-                                <FaRegEdit />
-                            </Link>
+                            {leave.status !== "Approved" ? (
+                                <Link to={`/addLeaves/${leave.id}`} className="text-orange-500">
+                                    <FaRegEdit />
+                                </Link>
+                            ) : (
+                                <span className="text-orange-500 cursor-not-allowed" title="Leave Request is Approved and cannot be edited">
+                                    <FaRegEdit />
+                                </span>
+                            )}
                             <button
                                 onClick={() => handleDelete(leave.id)}
                                 className="text-orange-500 ml-2"

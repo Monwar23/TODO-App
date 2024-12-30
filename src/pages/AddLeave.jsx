@@ -40,6 +40,7 @@ const AddLeave = () => {
         ...data,
         employeeName: selectedEmployee.name,
         employeeDesignation: selectedEmployee.designation,
+        status:leaveToEdit.status,
         id: leaveToEdit.id,
       };
       updateLeave(updatedLeave);  // Update leave in context
@@ -47,6 +48,7 @@ const AddLeave = () => {
     } else {
       const newLeave = {
         id: uuidv4(),
+        status:'Pending',
         employeeId,
         employeeName: selectedEmployee.name,
         employeeDesignation: selectedEmployee.designation,
