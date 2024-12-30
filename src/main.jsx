@@ -11,6 +11,9 @@ import AddEmployee from './pages/AddEmployee';
 import ErrorPage from './pages/ErrorPage';
 import Tasks from './pages/Tasks';
 import AssignTasks from './pages/AssignTasks';
+import LeaveList from './pages/LeaveList';
+import AddLeave from './pages/AddLeave';
+import { LeaveProvider } from './context/LeaveContext';
 
 const router = createBrowserRouter([
   {
@@ -42,12 +45,26 @@ const router = createBrowserRouter([
         path:'/assignTasks/:id',
         element:<AssignTasks></AssignTasks>
       },
+      {
+        path:'/leaves',
+        element:<LeaveList></LeaveList>
+      },
+      {
+        path:'/addLeaves',
+        element:<AddLeave></AddLeave>
+      },
+      {
+        path:'/addLeaves/:id',
+        element:<AddLeave></AddLeave>
+      },
     ]
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <LeaveProvider>
     <RouterProvider router={router} />
+    </LeaveProvider>
   </StrictMode>,
 )

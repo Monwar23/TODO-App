@@ -17,6 +17,10 @@ const Navbar = () => {
         <NavLink className={({ isActive }) =>
             isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
         } to="/assignTasks">Assign Tasks</NavLink>
+
+        <NavLink className={({ isActive }) =>
+            isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
+        } to="/leaves">Leaves List</NavLink>
     </>
 
     return (
