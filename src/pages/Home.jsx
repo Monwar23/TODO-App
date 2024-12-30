@@ -29,28 +29,11 @@ const Home = () => {
         return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
     };
 
-     // toggle available or unavailable
-     const toggleEmployeeStatus = (id) => {
-      const employee = employees.find((emp) => emp.id === id);
-    const taskCount = getTaskCount(id);
-
-    if (employee.activeStatus === "Available" && taskCount > 0) {
-        toast.error("Please assign your tasks to other employees before marking unavailable!");
-        setTimeout(() => navigate("/tasks"), 2000);
-        return;
-    }
-      const updatedEmployee = employees.map((employee) => {
-          if (employee.id === id) {
-              return {
-                  ...employee,
-                  activeStatus: employee.activeStatus === "Available" ? "Unavailable" : "Available"
-              }
-          }
-          return employee
-      });
-      setEmployees(updatedEmployee);
-      toast.info("Employee Status Updated!");
-  }
+     // Redirect to Leave List when toggling
+    const redirectToLeaveList = () => {
+      toast.info('Manage employee status in the Leave List.');
+      setTimeout(() => navigate('/leaves'), 2000);
+  };
 
     // delete operation
     const deleteEmployee = (id) => {
@@ -67,7 +50,7 @@ const Home = () => {
     { header: "Task Assigned", accessor: (row) => getTaskCount(row.id) },
     { header: "Status", accessor: (row) =>(
       <button
-          onClick={() => toggleEmployeeStatus(row.id)}
+          onClick={redirectToLeaveList}
           className={`btn px-2 py-1 rounded-lg ${row.activeStatus === "Available" ? "bg-green-500 text-white" : "bg-orange-500 text-white"
               }`}
       >
