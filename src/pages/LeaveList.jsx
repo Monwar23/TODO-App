@@ -10,7 +10,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 
 const LeaveList = () => {
-    const { leaves, deleteLeave,tasks } = useContext(LeaveContext); // Use context to get leaves and delete function
+    const { leaves, deleteLeave,tasks } = useContext(LeaveContext);
     const [filteredLeaves, setFilteredLeaves] = useState([]);
 
     // Load leaves into filteredLeaves
