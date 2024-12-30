@@ -10,12 +10,17 @@ export const LeaveProvider = ({ children }) => {
     setLeaves([...leaves, newLeave]);
   };
 
+  const updateLeave = (updatedLeave) => {
+    setLeaves(leaves.map(leave => leave.id === updatedLeave.id ? updatedLeave : leave));
+  };
+
   const deleteLeave = (leaveId) => {
     setLeaves(leaves.filter((leave) => leave.id !== leaveId));
   };
+  
 
   return (
-    <LeaveContext.Provider value={{ leaves, addLeave, deleteLeave }}>
+    <LeaveContext.Provider value={{ leaves, addLeave, deleteLeave,updateLeave }}>
       {children}
     </LeaveContext.Provider>
   );

@@ -25,9 +25,11 @@ const LeaveList = () => {
     };
 
     const columns = [
-        { header: 'ID', accessor: (item) => item.id },
         { header: 'Employee Name', accessor: (item) => item.employeeName },
+        { header: 'Designation', accessor: (item) => item.employeeDesignation },
         { header: 'Leave Type', accessor: (item) => item.leaveType },
+        { header: 'Start Leave', accessor: (item) => item.startDate },
+        { header: 'End Leave', accessor: (item) => item.endDate },
 
     ];
 

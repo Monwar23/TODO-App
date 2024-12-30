@@ -9,7 +9,7 @@ import FormField from "../components/FormField";
 
 const AddLeave = () => {
   // state declarations
-  const { leaves, addLeave} = useContext(LeaveContext);
+  const { leaves, addLeave,updateLeave} = useContext(LeaveContext);
   const [employees] = useLocalStorage('employees', []);
   const [leaveToEdit, setLeaveToEdit] = useState(null);
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const AddLeave = () => {
         employeeDesignation: selectedEmployee.designation,
         id: leaveToEdit.id,
       };
-      addLeave(updatedLeave);  // Update leave in context
+      updateLeave(updatedLeave);  // Update leave in context
       toast.success("Leave updated successfully!");
     } else {
       const newLeave = {
