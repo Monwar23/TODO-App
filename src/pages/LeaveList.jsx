@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import LeaveContext from '../context/LeaveContext';
 import Table from '../components/Table';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,7 @@ import { RiDeleteBin5Fill } from 'react-icons/ri';
 const LeaveList = () => {
     const { leaves,updateLeave, deleteLeave,tasks } = useContext(LeaveContext);
     const [filteredLeaves, setFilteredLeaves] = useState([]);
+    const navigate=useNavigate()
 
     // Load leaves into filteredLeaves
     useEffect(() => {
@@ -36,6 +37,7 @@ const LeaveList = () => {
 
         if (leave.status === 'Pending' && taskCount > 0) {
             toast.error('Please complete assigned tasks or reassigned other available employee before approving leave!');
+            setTimeout(() => navigate("/tasks"), 2000);
             return;
         }
 

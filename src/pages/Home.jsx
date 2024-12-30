@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import useLocalStorage from "../components/useLocalStorage";
@@ -17,8 +17,7 @@ const Home = () => {
     const [tasks] = useLocalStorage('tasks', []);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const deleteItem = useDeleteItem();
-    
-
+    const navigate=useNavigate()
 
     // data load from local Storage
     useEffect(() => {
@@ -37,6 +36,7 @@ const Home = () => {
 
     if (employee.activeStatus === "Available" && taskCount > 0) {
         toast.error("Please assign your tasks to other employees before marking unavailable!");
+        setTimeout(() => navigate("/tasks"), 2000);
         return;
     }
       const updatedEmployee = employees.map((employee) => {
