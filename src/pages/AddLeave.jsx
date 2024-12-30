@@ -1,54 +1,48 @@
-import { useState, useEffect, useContext } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LeaveContext from "../context/LeaveContext";
-import useLocalStorage from "../components/useLocalStorage";
-import FormField from "../components/FormField";
+import LeaveContext from '../context/LeaveContext';
+import useLocalStorage from '../components/useLocalStorage';
+import FormField from '../components/FormField';
+import { v4 as uuidv4 } from 'uuid';
 
 const AddLeave = () => {
-  // state declarations
-  const { leaves, addLeave,updateLeave} = useContext(LeaveContext);
+  const { state, dispatch } = useContext(LeaveContext);
   const [employees] = useLocalStorage('employees', []);
   const [leaveToEdit, setLeaveToEdit] = useState(null);
   const navigate = useNavigate();
-
-  // Get employee list with available status
-  const availableEmployees = employees.filter(employee => employee.activeStatus === 'Available');
-
-  // get id from url if editing an existing leave
   const { id } = useParams();
+
+  const availableEmployees = employees.filter(employee => employee.activeStatus === 'Available');
 
   useEffect(() => {
     if (id) {
-      const leave = leaves.find(leave => leave.id === id);
+      const leave = state.leaves.find(leave => leave.id === id);
       if (leave) {
         setLeaveToEdit(leave);
       }
     }
-  }, [id, leaves]);
+  }, [id, state.leaves]);
 
-  // Submit form to add or update leave
   const handleSubmit = (data) => {
     const { employeeId, leaveType, startDate, endDate } = data;
     const selectedEmployee = employees.find(emp => emp.id === employeeId);
 
-    // If editing an existing leave
     if (leaveToEdit) {
       const updatedLeave = {
         ...data,
         employeeName: selectedEmployee.name,
         employeeDesignation: selectedEmployee.designation,
-        status:leaveToEdit.status,
+        status: leaveToEdit.status,
         id: leaveToEdit.id,
       };
-      updateLeave(updatedLeave);  // Update leave in context
-      toast.success("Leave updated successfully!");
+      dispatch({ type: 'UPDATE_LEAVE', payload: updatedLeave });
+      toast.success('Leave updated successfully!');
     } else {
       const newLeave = {
         id: uuidv4(),
-        status:'Pending',
+        status: 'Pending',
         employeeId,
         employeeName: selectedEmployee.name,
         employeeDesignation: selectedEmployee.designation,
@@ -56,49 +50,48 @@ const AddLeave = () => {
         startDate,
         endDate,
       };
-      addLeave(newLeave);  // Add new leave to context
-      toast.success("Leave added successfully!");
+      dispatch({ type: 'ADD_LEAVE', payload: newLeave });
+      toast.success('Leave added successfully!');
     }
 
-    setTimeout(() => navigate("/leaves"), 2000);
+    setTimeout(() => navigate('/leaves'), 2000);
   };
 
-  // Fields for leave form
   const fields = [
     {
-      label: "Employee*",
-      type: "select",
-      name: "employeeId",
+      label: 'Employee*',
+      type: 'select',
+      name: 'employeeId',
       options: availableEmployees.map(emp => ({
         value: emp.id,
         label: `${emp.name} - ${emp.designation}`,
       })),
-      placeholder: "Select an employee",
+      placeholder: 'Select an employee',
       required: true,
     },
     {
-      label: "Leave Type*",
-      type: "select",
-      name: "leaveType",
+      label: 'Leave Type*',
+      type: 'select',
+      name: 'leaveType',
       options: [
-        { value: "sick", label: "Sick" },
-        { value: "vacation", label: "Vacation" },
+        { value: 'sick', label: 'Sick' },
+        { value: 'vacation', label: 'Vacation' },
       ],
-      placeholder: "Select leave type",
+      placeholder: 'Select leave type',
       required: true,
     },
     {
-      label: "Start Date*",
-      type: "date",
-      name: "startDate",
-      placeholder: "Select start date",
+      label: 'Start Date*',
+      type: 'date',
+      name: 'startDate',
+      placeholder: 'Select start date',
       required: true,
     },
     {
-      label: "End Date*",
-      type: "date",
-      name: "endDate",
-      placeholder: "Select end date",
+      label: 'End Date*',
+      type: 'date',
+      name: 'endDate',
+      placeholder: 'Select end date',
       required: true,
     },
   ];
@@ -106,7 +99,7 @@ const AddLeave = () => {
   return (
     <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
       <h3 className="text-2xl text-center font-medium text-gray-800">
-        {leaveToEdit ? "Update Leave" : "Add Leave"}
+        {leaveToEdit ? 'Update Leave' : 'Add Leave'}
       </h3>
       <FormField
         fields={fields}
