@@ -23,7 +23,7 @@ const Home = () => {
     useEffect(() => {
         setFilteredEmployees(employees);
     }, [employees]);
-
+ 
     // task count
     const getTaskCount = (employeeId) => {
         return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;

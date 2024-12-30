@@ -10,7 +10,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
 
 const LeaveList = () => {
-    const { leaves, deleteLeave } = useContext(LeaveContext); // Use context to get leaves and delete function
+    const { leaves, deleteLeave,tasks } = useContext(LeaveContext); // Use context to get leaves and delete function
     const [filteredLeaves, setFilteredLeaves] = useState([]);
 
     // Load leaves into filteredLeaves
@@ -24,12 +24,18 @@ const LeaveList = () => {
         toast.info('Leave deleted successfully!');
     };
 
+    // Function to get the count of assigned tasks for each employee
+    const getTaskCount = (employeeId) => {
+        return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
+    };
+
     const columns = [
         { header: 'Employee Name', accessor: (item) => item.employeeName },
         { header: 'Designation', accessor: (item) => item.employeeDesignation },
         { header: 'Leave Type', accessor: (item) => item.leaveType },
         { header: 'Start Leave', accessor: (item) => item.startDate },
         { header: 'End Leave', accessor: (item) => item.endDate },
+        { header: 'Assigned Tasks', accessor: (item) => getTaskCount(item.employeeId) }, 
 
     ];
 

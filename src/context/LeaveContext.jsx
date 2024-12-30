@@ -5,6 +5,7 @@ const LeaveContext = createContext();
 
 export const LeaveProvider = ({ children }) => {
   const [leaves, setLeaves] = useLocalStorage("leaves", []); // Use localStorage hook to persist the leaves
+  const [tasks] = useLocalStorage("tasks", []); // Use localStorage hook to persist the leaves
 
   const addLeave = (newLeave) => {
     setLeaves([...leaves, newLeave]);
@@ -20,7 +21,7 @@ export const LeaveProvider = ({ children }) => {
   
 
   return (
-    <LeaveContext.Provider value={{ leaves, addLeave, deleteLeave,updateLeave }}>
+    <LeaveContext.Provider value={{ leaves,tasks, addLeave, deleteLeave,updateLeave }}>
       {children}
     </LeaveContext.Provider>
   );
