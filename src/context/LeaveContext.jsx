@@ -4,9 +4,8 @@ import useLocalStorage from "../components/useLocalStorage";
 const LeaveContext = createContext();
 
 export const LeaveProvider = ({ children }) => {
-  const [leaves, setLeaves] = useLocalStorage("leaves", []); // Use localStorage hook to persist the leaves
-  const [tasks] = useLocalStorage("tasks", []); // Use localStorage hook to persist the leaves
-
+  const [leaves, setLeaves] = useLocalStorage("leaves", []); 
+  const [tasks] = useLocalStorage("tasks", []); 
   const addLeave = (newLeave) => {
     setLeaves([...leaves, newLeave]);
   };
