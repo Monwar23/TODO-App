@@ -76,6 +76,8 @@ const AddLeave = () => {
       options: [
         { value: 'sick', label: 'Sick' },
         { value: 'vacation', label: 'Vacation' },
+        { value: 'Annual Leave', label: 'Annual Leave' },
+        { value: 'Public Holidays', label: 'Public Holidays' },
       ],
       placeholder: 'Select leave type',
       required: true,
