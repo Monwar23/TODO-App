@@ -26,19 +26,19 @@ const leaveReducer = (state, action) => {
   }
 };
 
-// LeaveContext তৈরি
+//Create LeaveContext 
 const LeaveContext = createContext();
 
-// LeaveProvider কম্পোনেন্ট
+// LeaveProvider component
 export const LeaveProvider = ({ children }) => {
-  // LocalStorage থেকে leaves এবং tasks স্টেট নিয়ে আসা
+
   const [leaves, setLeaves] = useLocalStorage('leaves', []);
   const [tasks, setTasks] = useLocalStorage('tasks', []);
 
-  // useReducer হুক ব্যবহার করে state এবং dispatch নেওয়া
+  // Use reducer hook and get state and dispatch
   const [state, dispatch] = useReducer(leaveReducer, { leaves, tasks });
 
-  // state আপডেট করার জন্য localStorage ব্যবহার করা
+  // use localstorage for update state
   useEffect(() => {
     setLeaves(state.leaves);
     setTasks(state.tasks);
