@@ -92,8 +92,8 @@ const LeaveList = () => {
       <SearchBar
         data={state.leaves}
         onFilter={setFilteredLeaves}
-        keys={['id', 'name', 'leaveType']}
-        placeholder="Search by ID, Name, or Leave Type"
+        keys={[ 'employeeName','employeeDesignation' ,'leaveType']}
+        placeholder="Search by Name, Designation or Leave Type"
       />
 
       {filteredLeaves.length > 0 ? (
