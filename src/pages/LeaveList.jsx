@@ -11,7 +11,7 @@ import useLocalStorage from '../components/useLocalStorage';
 import NoData from '../components/NoData';
 
 // Utility functions
-const isEmployeeOnLeave = (employee, leaves, currentDate) => 
+const isEmployeeOnLeave = (employee, leaves, currentDate) =>
   leaves.some(
     (leave) =>
       leave.employeeId === employee.id &&
@@ -20,7 +20,7 @@ const isEmployeeOnLeave = (employee, leaves, currentDate) =>
       new Date(leave.endDate) >= currentDate
   );
 
-const updateEmployeeStatus = (employees, leaves, currentDate) => 
+const updateEmployeeStatus = (employees, leaves, currentDate) =>
   employees.map((employee) => ({
     ...employee,
     activeStatus: isEmployeeOnLeave(employee, leaves, currentDate) ? 'Unavailable' : 'Available',
@@ -84,9 +84,8 @@ const LeaveList = () => {
       accessor: (item) => (
         <button
           onClick={() => toggleLeaveStatus(item.id)}
-          className={`btn px-2 py-1 rounded-lg ${
-            item.status === 'Pending' ? 'bg-orange-500 text-white' : 'bg-green-500 text-white'
-          }`}
+          className={`btn px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-500 text-white' : 'bg-green-500 text-white'
+            }`}
         >
           {item.status}
         </button>
