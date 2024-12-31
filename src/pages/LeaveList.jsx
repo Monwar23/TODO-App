@@ -17,21 +17,50 @@ const LeaveList = () => {
   const [employees, setEmployees] = useLocalStorage('employees', []);
   const [tasks] = useLocalStorage('tasks', []);
 
+  // Sync filtered leaves with state
   useEffect(() => {
     setFilteredLeaves(state.leaves);
   }, [state.leaves]);
 
+  // Update employee active status based on leave dates
+  useEffect(() => {
+    const currentDate = new Date();
+
+    const updatedEmployees = employees.map((employee) => {
+      const isOnLeave = state.leaves.some(
+        (leave) =>
+          leave.employeeId === employee.id &&
+          leave.status === 'Approved' &&
+          new Date(leave.startDate) <= currentDate &&
+          new Date(leave.endDate) >= currentDate
+      );
+
+      return {
+        ...employee,
+        activeStatus: isOnLeave ? 'Unavailable' : 'Available',
+      };
+    });
+
+    // Update only if there's a change
+    if (JSON.stringify(updatedEmployees) !== JSON.stringify(employees)) {
+      setEmployees(updatedEmployees);
+    }
+  }, [state.leaves]); // Removed setEmployees from dependency array
+
+  // Handle leave deletion
   const handleDelete = (id) => {
     dispatch({ type: 'DELETE_LEAVE', payload: id });
     toast.info('Leave deleted successfully!');
   };
 
+  // Get the number of pending tasks for an employee
   const getTaskCount = (employeeId) => {
-    return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
+    return tasks.filter((task) => task.employeeId === employeeId && task.status !== 'Completed').length;
   };
 
+  // Toggle leave status and update employee active status
   const toggleLeaveStatus = (id) => {
-    const leave = state.leaves.find(l => l.id === id);
+    const leave = state.leaves.find((l) => l.id === id);
     const taskCount = getTaskCount(leave.employeeId);
 
     if (leave.status === 'Pending' && taskCount > 0) {
@@ -45,11 +74,17 @@ const LeaveList = () => {
 
     dispatch({ type: 'UPDATE_LEAVE', payload: updatedLeave });
 
-    const updatedEmployees = employees.map(employee => {
+    const currentDate = new Date();
+    const updatedEmployees = employees.map((employee) => {
       if (employee.id === leave.employeeId) {
+        const isOnLeave =
+          new Date(leave.startDate) <= currentDate &&
+          new Date(leave.endDate) >= currentDate &&
+          newLeaveStatus === 'Approved';
+
         return {
           ...employee,
-          activeStatus: newLeaveStatus === 'Pending' ? 'Available' : 'Unavailable',
+          activeStatus: isOnLeave ? 'Unavailable' : 'Available',
         };
       }
       return employee;
@@ -59,6 +94,7 @@ const LeaveList = () => {
     toast.info('Leave status updated!');
   };
 
+  // Define table columns
   const columns = [
     { header: 'Employee Name', accessor: (item) => item.employeeName },
     { header: 'Designation', accessor: (item) => item.employeeDesignation },
@@ -93,30 +129,34 @@ const LeaveList = () => {
       <SearchBar
         data={state.leaves}
         onFilter={setFilteredLeaves}
-        keys={[ 'employeeName','EmployeeDesignation', 'leaveType']}
+        keys={['employeeName', 'employeeDesignation', 'leaveType']}
         placeholder="Search by Name, Designation or Leave Type"
       />
 
       {filteredLeaves.length > 0 ? (
-        <Table columns={columns} data={filteredLeaves} renderActions={(leave) => (
-          <>
-            {leave.status !== 'Approved' ? (
-              <Link to={`/addLeaves/${leave.id}`} className="text-orange-500">
-                <FaRegEdit />
-              </Link>
-            ) : (
-              <span className="text-orange-500 cursor-not-allowed" title="Leave Request is Approved and cannot be edited">
-                <FaRegEdit />
-              </span>
-            )}
-            <button
-              onClick={() => handleDelete(leave.id)}
-              className="text-orange-500 ml-2"
-            >
-              <RiDeleteBin5Fill />
-            </button>
-          </>
-        )} />
+        <Table
+          columns={columns}
+          data={filteredLeaves}
+          renderActions={(leave) => (
+            <>
+              {leave.status !== 'Approved' ? (
+                <Link to={`/addLeaves/${leave.id}`} className="text-orange-500">
+                  <FaRegEdit />
+                </Link>
+              ) : (
+                <span className="text-orange-500 cursor-not-allowed" title="Leave Request is Approved and cannot be edited">
+                  <FaRegEdit />
+                </span>
+              )}
+              <button
+                onClick={() => handleDelete(leave.id)}
+                className="text-orange-500 ml-2"
+              >
+                <RiDeleteBin5Fill />
+              </button>
+            </>
+          )}
+        />
       ) : (
         <NoData />
       )}
