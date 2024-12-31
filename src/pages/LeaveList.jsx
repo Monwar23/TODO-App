@@ -92,7 +92,7 @@ const LeaveList = () => {
       <SearchBar
         data={state.leaves}
         onFilter={setFilteredLeaves}
-        keys={[ 'employeeName','employeeDesignation' ,'leaveType']}
+        keys={[ 'employeeName','EmployeeDesignation', 'leaveType']}
         placeholder="Search by Name, Designation or Leave Type"
       />
 
