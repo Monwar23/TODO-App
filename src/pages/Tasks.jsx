@@ -21,7 +21,7 @@ const Tasks = () => {
     // delete task
     const deleteTask = (id) => {
         const updatedTasks = deleteItem(tasks, setTasks, id, "tasks", "Task Deleted Successfully!");
-        setFilteredTasks(updatedTasks); 
+        setFilteredTasks(updatedTasks);
     }
 
     // toggle complete or incomplete
@@ -40,9 +40,9 @@ const Tasks = () => {
         toast.info("Task Status Updated!");
     }
 
-    const filteredByStatus = (filter === "All") 
-    ? filteredTasks 
-    : filteredTasks.filter(task => task.status === filter);
+    const filteredByStatus = (filter === "All")
+        ? filteredTasks
+        : filteredTasks.filter(task => task.status === filter);
 
     // table data details
 
@@ -79,11 +79,11 @@ const Tasks = () => {
                     <option value="Completed">Completed</option>
                 </select>
                 <SearchBar
-                data={tasks}
-                onFilter={setFilteredTasks}
-                keys={["description", "employeeName", "employeeId"]}
-                placeholder="Search tasks"
-            />
+                    data={tasks}
+                    onFilter={setFilteredTasks}
+                    keys={["description", "employeeName", "employeeId"]}
+                    placeholder="Search tasks"
+                />
             </div>
             {filteredByStatus.length > 0 ? (
                 <Table
