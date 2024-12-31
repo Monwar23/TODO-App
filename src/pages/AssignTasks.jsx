@@ -1,18 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useLocalStorage from "../components/useLocalStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import FormField from "../components/FormField";
 import { v4 as uuidv4 } from 'uuid';
-import LeaveContext from "../context/LeaveContext";
 
 const AssignTasks = () => {
     // state declare
     const [employees] = useLocalStorage('employees', []);
     const [tasks, setTasks] = useLocalStorage('tasks', []);
     const [taskToEdit, setTaskToEdit] = useState(null);
-    
+
     // navigate
 
     const navigate = useNavigate();
@@ -72,47 +71,47 @@ const AssignTasks = () => {
         setTimeout(() => navigate('/tasks'), 2000);
     }
 
-const fields = [
-    {
-        label: 'Employee*',
-        type: 'select',
-        name: 'employeeId',
-        options: availableEmployees.map(emp => ({
-            value: emp.id,
-            label: `${emp.name} - ${emp.designation}`,
-        })),
-        placeholder: 'Select an employee',
-        required: true,
-    },
-    {
-        label: 'Task Description*',
-        type: 'text',
-        name: 'description',
-        placeholder: 'Enter task description',
-        required: true,
-    },
-    {
-        label: 'Duration*',
-        type: 'text',
-        name: 'duration',
-        placeholder: 'Enter task duration',
-        required: true,
-    },
-];
+    const fields = [
+        {
+            label: 'Employee*',
+            type: 'select',
+            name: 'employeeId',
+            options: availableEmployees.map(emp => ({
+                value: emp.id,
+                label: `${emp.name} - ${emp.designation}`,
+            })),
+            placeholder: 'Select an employee',
+            required: true,
+        },
+        {
+            label: 'Task Description*',
+            type: 'text',
+            name: 'description',
+            placeholder: 'Enter task description',
+            required: true,
+        },
+        {
+            label: 'Duration*',
+            type: 'text',
+            name: 'duration',
+            placeholder: 'Enter task duration',
+            required: true,
+        },
+    ];
 
-return (
-    <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
-        <h3 className="text-2xl text-center font-medium text-gray-800">
-            {taskToEdit ? 'Update Task' : 'Assign Task'}
-        </h3>
-        <FormField
-            fields={fields}
-            initialValues={taskToEdit || {}}
-            onSubmit={handleSubmit}
-        />
-        <ToastContainer />
-    </div>
-);
+    return (
+        <div className="p-5 lg:w-2/5 w-3/5 mt-5 mx-auto bg-slate-50 shadow-lg rounded-lg">
+            <h3 className="text-2xl text-center font-medium text-gray-800">
+                {taskToEdit ? 'Update Task' : 'Assign Task'}
+            </h3>
+            <FormField
+                fields={fields}
+                initialValues={taskToEdit || {}}
+                onSubmit={handleSubmit}
+            />
+            <ToastContainer />
+        </div>
+    );
 };
 
 export default AssignTasks;
