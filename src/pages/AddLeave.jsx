@@ -51,7 +51,7 @@ const AddLeave = () => {
         endDate,
       };
       dispatch({ type: 'ADD_LEAVE', payload: newLeave });
-      toast.success('Leave added successfully!');
+      toast.success('Leave request added successfully!');
     }
 
     setTimeout(() => navigate('/leaves'), 2000);
