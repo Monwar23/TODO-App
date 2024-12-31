@@ -47,8 +47,9 @@ const Tasks = () => {
     // table data details
 
     const columns = [
-        { header: "Task", accessor: (row) => row.description },
-        { header: "Employee", accessor: (row) => `${row.employeeName} - ${row.employeeDesignation}` },
+        { header: "Task Description", accessor: (row) => row.description },
+        { header: "Assigned Employee Name", accessor: (row) => row.employeeName},
+        { header: "Assigned Employee Designation", accessor: (row) => row.employeeDesignation},
         { header: "Estimate Time", accessor: (row) => `${row.duration}` },
         {
             header: "Status", accessor: (row) => (
