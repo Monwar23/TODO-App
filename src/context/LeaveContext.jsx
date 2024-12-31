@@ -33,16 +33,14 @@ const LeaveContext = createContext();
 export const LeaveProvider = ({ children }) => {
 
   const [leaves, setLeaves] = useLocalStorage('leaves', []);
-  const [tasks, setTasks] = useLocalStorage('tasks', []);
 
   // Use reducer hook and get state and dispatch
-  const [state, dispatch] = useReducer(leaveReducer, { leaves, tasks });
+  const [state, dispatch] = useReducer(leaveReducer, { leaves });
 
   // use localstorage for update state
   useEffect(() => {
     setLeaves(state.leaves);
-    setTasks(state.tasks);
-  }, [state.leaves, state.tasks, setLeaves, setTasks]);
+  }, [state.leaves, setLeaves,]);
 
   return (
     <LeaveContext.Provider value={{ state, dispatch }}>

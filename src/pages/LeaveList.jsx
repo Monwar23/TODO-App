@@ -15,6 +15,7 @@ const LeaveList = () => {
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const navigate = useNavigate();
   const [employees, setEmployees] = useLocalStorage('employees', []);
+  const [tasks] = useLocalStorage('tasks', []);
 
   useEffect(() => {
     setFilteredLeaves(state.leaves);
@@ -26,7 +27,7 @@ const LeaveList = () => {
   };
 
   const getTaskCount = (employeeId) => {
-    return state.tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
+    return tasks.filter(task => task.employeeId === employeeId && task.status !== 'Completed').length;
   };
 
   const toggleLeaveStatus = (id) => {
