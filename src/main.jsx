@@ -19,43 +19,43 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root></Root>,
-    errorElement:<ErrorPage></ErrorPage>,
-    children:[
+    errorElement: <ErrorPage></ErrorPage>,
+    children: [
       {
-        path:'/',
-        element:<Home></Home>
+        path: '/',
+        element: <Home></Home>
       },
       {
-        path:'/addEmployee',
-        element:<AddEmployee></AddEmployee>
+        path: '/addEmployee',
+        element: <AddEmployee></AddEmployee>
       },
       {
-        path:'/addEmployee/:id',
-        element:<AddEmployee></AddEmployee>
+        path: '/addEmployee/:id',
+        element: <AddEmployee></AddEmployee>
       },
       {
-        path:'/tasks',
-        element:<Tasks></Tasks>
+        path: '/tasks',
+        element: <Tasks></Tasks>
       },
       {
-        path:'/assignTasks',
-        element:<AssignTasks></AssignTasks>
+        path: '/assignTasks',
+        element: <AssignTasks></AssignTasks>
       },
       {
-        path:'/assignTasks/:id',
-        element:<AssignTasks></AssignTasks>
+        path: '/assignTasks/:id',
+        element: <AssignTasks></AssignTasks>
       },
       {
-        path:'/leaves',
-        element:<LeaveList></LeaveList>
+        path: '/leaves',
+        element: <LeaveList></LeaveList>
       },
       {
-        path:'/addLeaves',
-        element:<AddLeave></AddLeave>
+        path: '/addLeaves',
+        element: <AddLeave></AddLeave>
       },
       {
-        path:'/addLeaves/:id',
-        element:<AddLeave></AddLeave>
+        path: '/addLeaves/:id',
+        element: <AddLeave></AddLeave>
       },
     ]
   },
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <LeaveProvider>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </LeaveProvider>
   </StrictMode>,
 )
