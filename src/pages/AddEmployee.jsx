@@ -27,19 +27,19 @@ const AddEmployee = () => {
     }
   }, [id, employees])
 
-  const handleSubmit=(data) => {
+  const handleSubmit = (data) => {
 
     const emailExists = employees.some(emp => emp.email === data.email && emp.id !== (employeeToEdit?.id || ''));
 
-  if (emailExists) {
-    toast.error('This email is already exist for another employee. Please enter a different email.');
-    return; 
-  }
+    if (emailExists) {
+      toast.error('This email is already exist for another employee. Please enter a different email.');
+      return;
+    }
 
     let updatedEmployees;
     if (employeeToEdit) {
       updatedEmployees = employees.map((emp) =>
-        emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id ,activeStatus: employeeToEdit.activeStatus} : emp
+        emp.id === employeeToEdit.id ? { ...data, id: employeeToEdit.id, activeStatus: employeeToEdit.activeStatus } : emp
       );
     } else {
       const newEmployee = { ...data, id: uuidv4(), activeStatus: 'Available' };
