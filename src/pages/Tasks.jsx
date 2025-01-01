@@ -48,8 +48,8 @@ const Tasks = () => {
 
     const columns = [
         { header: "Task Description", accessor: (row) => row.description },
-        { header: "Assigned Employee Name", accessor: (row) => row.employeeName},
-        { header: "Assigned Employee Designation", accessor: (row) => row.employeeDesignation},
+        { header: "Assigned Employee Name", accessor: (row) => row.employeeName },
+        { header: "Assigned Employee Designation", accessor: (row) => row.employeeDesignation },
         { header: "Estimate Time", accessor: (row) => `${row.duration}` },
         {
             header: "Status", accessor: (row) => (
