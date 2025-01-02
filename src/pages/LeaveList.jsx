@@ -27,7 +27,9 @@ const updateEmployeeStatus = (employees, leaves, currentDate) =>
   }));
 
 const LeaveList = () => {
+  // context used
   const { state, dispatch } = useContext(LeaveContext);
+  
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const navigate = useNavigate();
   const [employees, setEmployees] = useLocalStorage('employees', []);
