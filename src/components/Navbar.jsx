@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-    const navLinks = <>
+    const navLinks = 
+    <>
         <NavLink className={({ isActive }) =>
             isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
         } to="/">Home</NavLink>
@@ -21,6 +22,7 @@ const Navbar = () => {
         <NavLink className={({ isActive }) =>
             isActive ? 'text-orange-500 font-semibold' : 'font-semibold hover:text-orange-500'
         } to="/leaves">Leaves List</NavLink>
+        
     </>
 
     return (
