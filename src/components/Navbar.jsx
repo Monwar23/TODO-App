@@ -29,12 +29,12 @@ const Navbar = () => {
         <div className="bg-slate-200 shadow-lg h-12 flex justify-around items-center">
             <h2 className="text-2xl font-semibold">
                 <span className="text-orange-500">TODO</span>
-                 App
-                 </h2>
+                App
+            </h2>
             <div className="flex gap-5">
 
                 {navLinks}
-                
+
             </div>
         </div>
     );
