@@ -31,10 +31,9 @@ const Navbar = () => {
                 <span className="text-orange-500">TODO</span>
                 App
             </h2>
+
             <div className="flex gap-5">
-
                 {navLinks}
-
             </div>
         </div>
     );
